@@ -1,4 +1,8 @@
-#include <Windows.h>
+#include "MyWin.h"
+
+
+#include <string>
+#include <sstream>
 
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
 
@@ -15,12 +19,12 @@ int CALLBACK WinMain(
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
-	
+
 	wndClass.style = CS_OWNDC;
 	wndClass.hInstance = hInstance;
 	wndClass.lpfnWndProc = WndProc;
 	wndClass.lpszClassName = pClassName;
-	
+
 	RegisterClassEx(&wndClass);
 
 	auto windowHandle = CreateWindowEx(
@@ -36,7 +40,7 @@ int CALLBACK WinMain(
 	MSG msg = { 0 };
 
 	BOOL result = { 0 };
-	while ( (result = GetMessage(&msg, nullptr, 0,0))> 0 && msg.message != WM_QUIT) {
+	while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
@@ -55,7 +59,32 @@ LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l)
 	case WM_CLOSE:
 		PostQuitMessage(0x1337);
 		break;
-	}
+	case WM_KEYDOWN:
+		if (w == 'F')
+		{
+			SetWindowText(wnd, "LOL");
+		}
+		break;
+	case WM_KEYUP:
+		if (w == 'F')
+		{
+			SetWindowText(wnd, "LOL or is it?");
+		}
+		break;
+	case WM_CHAR:
 
+		break;
+
+	case WM_MOUSEMOVE:
+	{
+		POINTS pt = MAKEPOINTS(l);
+		std::ostringstream s;
+		s << "(" << pt.x << "/" << pt.y << ")";
+
+		SetWindowText(wnd, s.str().c_str());
+
+	}
+	break;
+	}
 	return DefWindowProc(wnd, msg, w, l);
 }
