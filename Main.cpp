@@ -1,8 +1,9 @@
-#include "MyWin.h"
-
+#include "MyWinHeader.h"
 
 #include <string>
 #include <sstream>
+
+#include "Window.h"
 
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
 
@@ -12,30 +13,8 @@ int CALLBACK WinMain(
 	LPSTR lpCmdLine,
 	int nCmdShow)
 {
-
-	const auto pClassName = "GettingInShapes";
-
-	WNDCLASSEX wndClass = { 0 };
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.cbClsExtra = 0;
-	wndClass.cbWndExtra = 0;
-
-	wndClass.style = CS_OWNDC;
-	wndClass.hInstance = hInstance;
-	wndClass.lpfnWndProc = WndProc;
-	wndClass.lpszClassName = pClassName;
-
-	RegisterClassEx(&wndClass);
-
-	auto windowHandle = CreateWindowEx(
-		0,
-		pClassName,
-		"GettingInShapeWindow",
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		200, 200, 640, 480,
-		nullptr, nullptr, hInstance, nullptr);
-
-	ShowWindow(windowHandle, SW_SHOW);
+	Window wnd(800, 300, "My first custom window");
+	Window wnd2(800, 300, "My second custom window");
 
 	MSG msg = { 0 };
 
@@ -50,41 +29,4 @@ int CALLBACK WinMain(
 	}
 
 	return EXIT_SUCCESS;
-}
-
-LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l)
-{
-	switch (msg)
-	{
-	case WM_CLOSE:
-		PostQuitMessage(0x1337);
-		break;
-	case WM_KEYDOWN:
-		if (w == 'F')
-		{
-			SetWindowText(wnd, "LOL");
-		}
-		break;
-	case WM_KEYUP:
-		if (w == 'F')
-		{
-			SetWindowText(wnd, "LOL or is it?");
-		}
-		break;
-	case WM_CHAR:
-
-		break;
-
-	case WM_MOUSEMOVE:
-	{
-		POINTS pt = MAKEPOINTS(l);
-		std::ostringstream s;
-		s << "(" << pt.x << "/" << pt.y << ")";
-
-		SetWindowText(wnd, s.str().c_str());
-
-	}
-	break;
-	}
-	return DefWindowProc(wnd, msg, w, l);
 }
