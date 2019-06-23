@@ -17,7 +17,7 @@ int CALLBACK WinMain(
 	Window wnd2(800, 300, "My second custom window");
 
 	MSG msg = { 0 };
-
+	 
 	BOOL result = { 0 };
 	while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) {
 		TranslateMessage(&msg);
