@@ -1,41 +1,33 @@
 #include "Window.h"
 
-Window::Window(int width, int heigth, const char * name) {
 
-	RECT wr = { 0 };
-	wr.left = 100;
-	wr.top = 100;
-
-	wr.bottom = wr.top + heigth;
-	wr.right = wr.left + width;
-
-	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false);
-
-	windowHandle = CreateWindow(
-		WindowClass::GetWindowClassName(), name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
-		nullptr, nullptr, WindowClass::GetInstance(), this);
-	ShowWindow(windowHandle, SW_SHOWDEFAULT);
-}
-
-Window::~Window() {
-	DestroyWindow(windowHandle);
-}
-
-LRESULT Window::InitialMessageHandler(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
+Window::Window(HWND windowHandle) 
 {
-	if (msg == WM_NCCREATE)
+	m_windowHandle = windowHandle;
+}
+
+Window::~Window() 
+{
+	DestroyWindow(m_windowHandle);
+}
+
+Window::Window(const Window & other)
+{
+	m_windowHandle = other.m_windowHandle;
+}
+
+void Window::Show() noexcept
+{
+	ShowWindow(m_windowHandle, SW_SHOWDEFAULT);
+}
+
+void Window::SetWindowHandle(HWND windowHandle)
+{
+	if (m_windowHandle != nullptr)
 	{
-		const CREATESTRUCT* const pCreate = reinterpret_cast<CREATESTRUCT*>(l);
-		auto pWnd = static_cast<Window*>(pCreate->lpCreateParams);
-		SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWnd));
-		SetWindowLongPtr(handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&HandleMessageAdapter));
-
-		return pWnd->HandleMsg(handle, msg, w, l);
+		throw std::exception("Cannot set the window handle of a window object twice");
 	}
-
-	return DefWindowProc(handle, msg, w, l);
+	m_windowHandle = windowHandle;
 }
 
 LRESULT Window::HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
@@ -68,44 +60,4 @@ LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 	
 	}
 	return DefWindowProc(handle, msg, w, l);
-}
-
-
-
-//STATIC WINDOW CLASS
-
-HINSTANCE Window::WindowClass::hInst;
-Window::WindowClass Window::WindowClass::instance;
-
-const char * Window::WindowClass::GetWindowClassName() noexcept
-{
-	return wndClassName;
-}
-
-HINSTANCE Window::WindowClass::GetInstance() noexcept
-{
-	return hInst;
-}
-
-Window::WindowClass::WindowClass()noexcept
-{
-	hInst = GetModuleHandle(nullptr);
-
-
-	WNDCLASSEX wndClass = { 0 };
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.cbClsExtra = 0;
-	wndClass.cbWndExtra = 0;
-
-	wndClass.style = CS_OWNDC;
-	wndClass.hInstance = GetInstance();
-	wndClass.lpfnWndProc = Window::InitialMessageHandler;
-	wndClass.lpszClassName = GetWindowClassName();
-
-	RegisterClassEx(&wndClass);
-}
-
-Window::WindowClass::~WindowClass()
-{
-	UnregisterClass(wndClassName, hInst);
 }

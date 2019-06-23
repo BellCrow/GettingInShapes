@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Window.h"
+#include "WindowFactory.h"
 
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
 
@@ -13,8 +14,10 @@ int CALLBACK WinMain(
 	LPSTR lpCmdLine,
 	int nCmdShow)
 {
-	Window wnd(800, 300, "My first custom window");
-	Window wnd2(800, 300, "My second custom window");
+	auto wnd = WindowFactory::Instance.GenerateWindow(800, 300, "My first custom window");
+	auto wnd2 = WindowFactory::Instance.GenerateWindow(656, 30, "om window");
+	wnd.Show();
+	wnd2.Show();
 
 	MSG msg = { 0 };
 	 
