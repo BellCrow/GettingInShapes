@@ -22,15 +22,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
+      <Filter>WindowHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="MyException.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowException.cpp">
+      <Filter>WindowHandling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyWinHeader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="MyException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowException.h">
+      <Filter>WindowHandling</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
