@@ -17,27 +17,31 @@ int CALLBACK WinMain(
 	{
 		Window wnd(800, 300, "My first custom window");
 		Window wnd2(800, 300, "My second custom window");
+		
+		MSG msg = { 0 };
+
+		BOOL result = { 0 };
+
+		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) 
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	if (msg.message == WM_QUIT)
+	{
+		return msg.wParam;
+	}
 	}
 	catch (const WindowException& e)
 	{
 		MessageBox(nullptr, e.what(), "Window exception", MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch (const std::exception&)
+	catch (const std::exception& e)
 	{
-
+		MessageBox(nullptr, e.what(), "Unknown exception creating windows", MB_OK | MB_ICONEXCLAMATION);
 	}
 
-	MSG msg = { 0 };
-
-	BOOL result = { 0 };
-	while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-	if (msg.message == WM_QUIT)
-	{
-		return msg.wParam;
-	}
+	
 
 	return EXIT_SUCCESS;
 }

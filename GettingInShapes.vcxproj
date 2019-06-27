@@ -129,12 +129,14 @@
     <ClCompile Include="MyException.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowException.cpp" />
+    <ClCompile Include="WindowMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyException.h" />
     <ClInclude Include="MyWinHeader.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowException.h" />
+    <ClInclude Include="WindowMessage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

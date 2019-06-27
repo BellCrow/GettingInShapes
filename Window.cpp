@@ -11,20 +11,20 @@ Window::Window(int width, int heigth, const char * name) {
 
 	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false);
 
-	windowHandle = CreateWindow(
+	m_windowHandle = CreateWindow(
 		WindowClass::GetWindowClassName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this);
-	if (windowHandle == 0)
+	if (m_windowHandle == 0)
 	{
 		throw WINDOW_EXCEPTION(GetLastError());
 	}
-	ShowWindow(windowHandle, SW_SHOWDEFAULT);
+	ShowWindow(m_windowHandle, SW_SHOWDEFAULT);
 }
 
 Window::~Window() {
-	DestroyWindow(windowHandle);
+	DestroyWindow(m_windowHandle);
 }
 
 LRESULT Window::InitialMessageHandler(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept

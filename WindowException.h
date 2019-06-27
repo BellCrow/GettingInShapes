@@ -13,7 +13,7 @@ public:
 
 private:
 	static std::string TranslateError(HRESULT error) noexcept;
-	HRESULT hr;
+	HRESULT m_hr;
 };
 
 #define WINDOW_EXCEPTION(hr) WindowException(__LINE__, __FILE__, hr)

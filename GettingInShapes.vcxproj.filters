@@ -16,6 +16,9 @@
     <Filter Include="WindowHandling">
       <UniqueIdentifier>{d6856f82-5cf2-476a-89af-12d6fcc602ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{7c71d4ec-b73e-4b25-820f-848cb4320242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,6 +33,9 @@
     <ClCompile Include="WindowException.cpp">
       <Filter>WindowHandling</Filter>
     </ClCompile>
+    <ClCompile Include="WindowMessage.cpp">
+      <Filter>WindowHandling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyWinHeader.h">
@@ -42,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WindowException.h">
+      <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowMessage.h">
       <Filter>WindowHandling</Filter>
     </ClInclude>
   </ItemGroup>

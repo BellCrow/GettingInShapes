@@ -6,7 +6,7 @@
 class Window
 {
 private :
-	HWND windowHandle;
+	HWND m_windowHandle;
 
 public:
 	Window(int width, int height, const char* name);
@@ -40,4 +40,4 @@ private:
 	};
 };
 
-#define WINDOW_EXCEPTION(hr) WindowException(__LINE__,__FILE__,hr)
+
