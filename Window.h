@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyWinHeader.h"
+#include "WindowException.h"
 
 class Window
 {
@@ -39,3 +40,4 @@ private:
 	};
 };
 
+#define WINDOW_EXCEPTION(hr) WindowException(__LINE__,__FILE__,hr)

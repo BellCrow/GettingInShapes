@@ -5,7 +5,7 @@
 class BaseException: public std::exception
 {
 public:
-	BaseException(int lineNumber, const char* fileName);
+	BaseException(int lineNumber, const char* fileName) noexcept;
 	~BaseException();
 
 	const char* what() const noexcept override;

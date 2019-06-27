@@ -13,8 +13,19 @@ int CALLBACK WinMain(
 	LPSTR lpCmdLine,
 	int nCmdShow)
 {
-	Window wnd(800, 300, "My first custom window");
-	Window wnd2(800, 300, "My second custom window");
+	try
+	{
+		Window wnd(800, 300, "My first custom window");
+		Window wnd2(800, 300, "My second custom window");
+	}
+	catch (const WindowException& e)
+	{
+		MessageBox(nullptr, e.what(), "Window exception", MB_OK | MB_ICONEXCLAMATION);
+	}
+	catch (const std::exception&)
+	{
+
+	}
 
 	MSG msg = { 0 };
 

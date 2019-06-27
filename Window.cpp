@@ -16,6 +16,10 @@ Window::Window(int width, int heigth, const char * name) {
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this);
+	if (windowHandle == 0)
+	{
+		throw WINDOW_EXCEPTION(GetLastError());
+	}
 	ShowWindow(windowHandle, SW_SHOWDEFAULT);
 }
 
