@@ -1,6 +1,10 @@
 #include "WindowException.h"
 #include <sstream>
 
+WindowException::WindowException(int line, const char * file) noexcept :
+	BaseException(line, file),
+	m_hr(GetLastError())
+{}
 
 WindowException::WindowException(int line, const char * file, HRESULT hr) noexcept:
 	BaseException(line,file),
@@ -17,8 +21,8 @@ const char * WindowException::what() const noexcept
 	oss << GetType() << std::endl
 		<< "Description:" << TranslateError(m_hr) << std::endl
 		<< ToString() << std::endl;
-	whatBuffer = oss.str();
-	return whatBuffer.c_str();
+	m_whatBuffer = oss.str();
+	return m_whatBuffer.c_str();
 }
 
 const char * WindowException::GetType() const noexcept
@@ -37,7 +41,7 @@ std::string WindowException::TranslateError(HRESULT error) noexcept
 
 	auto result = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&messageBuffer),0, nullptr);
+		nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&messageBuffer), 0, nullptr);
 	if (result == 0)
 	{
 		return "Unknown error occured";

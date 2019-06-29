@@ -2,9 +2,10 @@
 #include "MyWinHeader.h"
 #include "MyException.h"
 
-class WindowException: public BaseException
+class WindowException : public BaseException
 {
 public:
+	WindowException(int line, const char* file) noexcept;
 	WindowException(int line, const char* file, HRESULT hr) noexcept;
 	~WindowException();
 	const char* what() const noexcept override;
@@ -17,4 +18,4 @@ private:
 };
 
 #define WINDOW_EXCEPTION(hr) WindowException(__LINE__, __FILE__, hr)
-
+#define WINDOW_EXCEPTION() WindowException(__LINE__,__FILE__)
