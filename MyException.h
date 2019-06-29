@@ -2,7 +2,7 @@
 #include <exception>
 #include <string>
 
-class BaseException: public std::exception
+class BaseException : public std::exception
 {
 public:
 	BaseException(int lineNumber, const char* fileName) noexcept;
@@ -14,10 +14,9 @@ public:
 	const std::string& GetFile() const noexcept;
 	std::string ToString() const noexcept;
 private:
-	int line;
-	std::string file;
+	int m_line;
+	std::string m_file;
 
 protected:
-	mutable std::string whatBuffer;
+	mutable std::string m_whatBuffer;
 };
-

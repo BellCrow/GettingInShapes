@@ -5,7 +5,7 @@
 
 class Window
 {
-private :
+private:
 	HWND windowHandle;
 
 public:
@@ -19,7 +19,7 @@ public:
 
 	LRESULT HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
 
-private: 
+private:
 	class WindowClass
 	{
 	public:
@@ -27,7 +27,7 @@ private:
 		static HINSTANCE GetInstance() noexcept;
 
 	private:
-			
+
 		WindowClass() noexcept;
 		~WindowClass();
 
@@ -39,5 +39,3 @@ private:
 		static HINSTANCE hInst;
 	};
 };
-
-#define WINDOW_EXCEPTION(hr) WindowException(__LINE__,__FILE__,hr)

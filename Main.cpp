@@ -24,7 +24,6 @@ int CALLBACK WinMain(
 	}
 	catch (const std::exception&)
 	{
-
 	}
 
 	MSG msg = { 0 };
