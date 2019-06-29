@@ -27,10 +27,10 @@ int CALLBACK WinMain(
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-	if (msg.message == WM_QUIT)
-	{
-		return msg.wParam;
-	}
+		if (msg.message == WM_QUIT)
+		{
+			return msg.wParam;
+		}
 	}
 	catch (const WindowException& e)
 	{

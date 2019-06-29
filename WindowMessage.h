@@ -12,5 +12,10 @@ private:
 public:
 	WindowMessage(HWND handle, UINT msg, WPARAM w, LPARAM l);
 	~WindowMessage();
+
+	HWND GetHandle() const noexcept;
+	UINT GetMessageType() const noexcept;
+	WPARAM GetWParam() const noexcept;
+	LPARAM GetLParam() const noexcept;
 };
 

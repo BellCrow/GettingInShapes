@@ -9,3 +9,23 @@ WindowMessage::WindowMessage(HWND handle, UINT msg, WPARAM w, LPARAM l)
 {}
 
 WindowMessage::~WindowMessage(){}
+
+HWND WindowMessage::GetHandle() const noexcept
+{
+	return m_handle;
+}
+
+UINT WindowMessage::GetMessageType() const noexcept
+{
+	return m_msg;
+}
+
+WPARAM WindowMessage::GetWParam() const noexcept
+{
+	return m_w;
+}
+
+LPARAM WindowMessage::GetLParam() const noexcept
+{
+	return m_l;
+}

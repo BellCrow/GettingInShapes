@@ -2,7 +2,7 @@
 
 #include "MyWinHeader.h"
 #include "WindowException.h"
-
+#include <boost/signals2.hpp>
 class Window
 {
 private :
