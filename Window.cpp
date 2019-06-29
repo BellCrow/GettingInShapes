@@ -1,7 +1,6 @@
 #include "Window.h"
 
 Window::Window(int width, int heigth, const char * name) {
-
 	RECT wr = { 0 };
 	wr.left = 100;
 	wr.top = 100;
@@ -69,12 +68,9 @@ LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 			SetWindowText(handle, "LOL or is it?");
 		}
 		break;
-	
 	}
 	return DefWindowProc(handle, msg, w, l);
 }
-
-
 
 //STATIC WINDOW CLASS
 
@@ -94,7 +90,6 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 Window::WindowClass::WindowClass()noexcept
 {
 	hInst = GetModuleHandle(nullptr);
-
 
 	WNDCLASSEX wndClass = { 0 };
 	wndClass.cbSize = sizeof(WNDCLASSEX);
