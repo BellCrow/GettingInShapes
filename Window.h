@@ -39,5 +39,3 @@ private:
 		static HINSTANCE hInst;
 	};
 };
-
-#define WINDOW_EXCEPTION(hr) WindowException(__LINE__,__FILE__,hr)

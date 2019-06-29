@@ -8,22 +8,29 @@ Window::Window(int width, int heigth, const char * name) {
 	wr.bottom = wr.top + heigth;
 	wr.right = wr.left + width;
 
-	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false);
+	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false) == FALSE)
+	{
+		throw WINDOW_EXCEPTION();
+	}
 
 	windowHandle = CreateWindow(
 		WindowClass::GetWindowClassName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this);
+
 	if (windowHandle == 0)
 	{
-		throw WINDOW_EXCEPTION(GetLastError());
+		throw WINDOW_EXCEPTION();
 	}
 	ShowWindow(windowHandle, SW_SHOWDEFAULT);
 }
 
 Window::~Window() {
-	DestroyWindow(windowHandle);
+	if (DestroyWindow(windowHandle) == FALSE)
+	{
+		throw WINDOW_EXCEPTION();
+	}
 }
 
 LRESULT Window::InitialMessageHandler(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
@@ -101,10 +108,16 @@ Window::WindowClass::WindowClass()noexcept
 	wndClass.lpfnWndProc = Window::InitialMessageHandler;
 	wndClass.lpszClassName = GetWindowClassName();
 
-	RegisterClassEx(&wndClass);
+	if (RegisterClassEx(&wndClass) == 0)
+	{
+		throw WINDOW_EXCEPTION();
+	}
 }
 
 Window::WindowClass::~WindowClass()
 {
-	UnregisterClass(wndClassName, hInst);
+	if (UnregisterClass(wndClassName, hInst) == FALSE)
+	{
+		throw WINDOW_EXCEPTION();
+	}
 }

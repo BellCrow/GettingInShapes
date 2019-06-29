@@ -18,4 +18,4 @@ private:
 };
 
 #define WINDOW_EXCEPTION(hr) WindowException(__LINE__, __FILE__, hr)
-#define WINDOW_EXCEPTION WindowException(__LINE__,__FILE__)
+#define WINDOW_EXCEPTION() WindowException(__LINE__,__FILE__)
