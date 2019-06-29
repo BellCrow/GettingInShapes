@@ -1,6 +1,7 @@
 #include "Window.h"
 
-Window::Window(int width, int heigth, const char * name) {
+Window::Window(int width, int heigth, const char * name) 
+{
 	RECT wr = { 0 };
 	wr.left = 100;
 	wr.top = 100;
@@ -25,11 +26,9 @@ Window::Window(int width, int heigth, const char * name) {
 	ShowWindow(m_windowHandle, SW_SHOWDEFAULT);
 }
 
-Window::~Window() {
-	if (DestroyWindow(windowHandle) == FALSE)
-	{
-		throw WINDOW_EXCEPTION();
-	}
+Window::~Window() noexcept
+{
+	DestroyWindow(m_windowHandle);
 }
 
 LRESULT Window::InitialMessageHandler(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
@@ -93,7 +92,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 	return hInst;
 }
 
-Window::WindowClass::WindowClass()noexcept
+Window::WindowClass::WindowClass()
 {
 	hInst = GetModuleHandle(nullptr);
 
@@ -113,10 +112,7 @@ Window::WindowClass::WindowClass()noexcept
 	}
 }
 
-Window::WindowClass::~WindowClass()
+Window::WindowClass::~WindowClass() noexcept
 {
-	if (UnregisterClass(wndClassName, hInst) == FALSE)
-	{
-		throw WINDOW_EXCEPTION();
-	}
+	UnregisterClass(wndClassName, hInst);
 }

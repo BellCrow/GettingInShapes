@@ -10,7 +10,7 @@ private :
 
 public:
 	Window(int width, int height, const char* name);
-	~Window();
+	~Window()noexcept;
 	Window(const Window&) = delete;
 	Window& operator= (const Window&) = delete;
 
@@ -28,8 +28,8 @@ private:
 
 	private:
 
-		WindowClass() noexcept;
-		~WindowClass();
+		WindowClass();
+		~WindowClass() noexcept;
 
 		WindowClass(const WindowClass&) = delete;
 		WindowClass& operator=(const WindowClass&) = delete;
