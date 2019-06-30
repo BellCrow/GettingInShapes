@@ -2,6 +2,7 @@
 
 #include "MyWinHeader.h"
 #include "WindowException.h"
+#include "WindowMessage.h"
 #include <boost/signals2.hpp>
 class Window
 {
@@ -18,6 +19,8 @@ public:
 	static LRESULT CALLBACK HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
 
 	LRESULT HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
+
+	boost::signals2::signal<void (WindowMessage)> MessageReceived;
 
 private:
 	class WindowClass

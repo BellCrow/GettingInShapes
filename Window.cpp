@@ -54,26 +54,14 @@ LRESULT Window::HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) 
 
 LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 {
-	switch (msg)
+
+	MessageReceived(WindowMessage(handle, msg, w, l));
+	if (msg == WM_CLOSE)
 	{
-	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
-		break;
-
-	case WM_KEYDOWN:
-		if (w == 'F')
-		{
-			SetWindowText(handle, "LOL");
-		}
-		break;
-	case WM_KEYUP:
-		if (w == 'F')
-		{
-			SetWindowText(handle, "LOL or is it?");
-		}
-		break;
 	}
+		
 	return DefWindowProc(handle, msg, w, l);
 }
 

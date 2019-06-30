@@ -8,7 +8,15 @@ WindowMessage::WindowMessage(HWND handle, UINT msg, WPARAM w, LPARAM l)
 	m_l(l)
 {}
 
-WindowMessage::~WindowMessage(){}
+WindowMessage::WindowMessage(const WindowMessage & message)
+	:
+	m_handle(message.m_handle),
+	m_msg(message.m_msg),
+	m_w(message.m_w),
+	m_l(message.m_l)
+{}
+
+WindowMessage::~WindowMessage() {}
 
 HWND WindowMessage::GetHandle() const noexcept
 {

@@ -7,6 +7,9 @@
 
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
 
+
+
+
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE pInstance,
@@ -16,7 +19,6 @@ int CALLBACK WinMain(
 	try
 	{
 		Window wnd(800, 300, "My first custom window");
-		Window wnd2(800, 300, "My second custom window");
 		
 		MSG msg = { 0 };
 
