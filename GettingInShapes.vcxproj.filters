@@ -36,6 +36,12 @@
     <ClCompile Include="WindowMessage.cpp">
       <Filter>WindowHandling</Filter>
     </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardException.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyWinHeader.h">
@@ -52,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="WindowMessage.h">
       <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardException.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
