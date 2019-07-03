@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyboardException.cpp" />
+    <ClCompile Include="KeyboardMessage.cpp" />
+    <ClCompile Include="KeyboardWindowConnector.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyException.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -157,7 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="KeyboardEventType.h" />
     <ClInclude Include="KeyboardException.h" />
+    <ClInclude Include="KeyboardMessage.h" />
+    <ClInclude Include="KeyboardWindowConnector.h" />
     <ClInclude Include="MyException.h" />
     <ClInclude Include="MyWinHeader.h" />
     <ClInclude Include="Window.h" />

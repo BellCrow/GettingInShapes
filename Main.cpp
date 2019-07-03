@@ -4,11 +4,10 @@
 #include <sstream>
 
 #include "Window.h"
+#include "Keyboard.h"
+#include "KeyboardWindowConnector.h"
 
 LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
-
-
-
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -19,7 +18,10 @@ int CALLBACK WinMain(
 	try
 	{
 		Window wnd(800, 300, "My first custom window");
-		
+		Keyboard keyboard;
+
+		KeyboardWindowConnector sink = KeyboardWindowConnector(keyboard,wnd);
+
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };

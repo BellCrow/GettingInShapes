@@ -19,6 +19,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{7c71d4ec-b73e-4b25-820f-848cb4320242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input\Keyboard">
+      <UniqueIdentifier>{e2101297-284e-456c-9b2e-2bfa11ee1615}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -37,10 +40,16 @@
       <Filter>WindowHandling</Filter>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
-      <Filter>Input</Filter>
+      <Filter>Input\Keyboard</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardException.cpp">
-      <Filter>Input</Filter>
+      <Filter>Input\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardMessage.cpp">
+      <Filter>Input\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardWindowConnector.cpp">
+      <Filter>Input\Keyboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,10 +69,19 @@
       <Filter>WindowHandling</Filter>
     </ClInclude>
     <ClInclude Include="Keyboard.h">
-      <Filter>Input</Filter>
+      <Filter>Input\Keyboard</Filter>
     </ClInclude>
     <ClInclude Include="KeyboardException.h">
-      <Filter>Input</Filter>
+      <Filter>Input\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardMessage.h">
+      <Filter>Input\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEventType.h">
+      <Filter>Input\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardWindowConnector.h">
+      <Filter>Input\Keyboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
