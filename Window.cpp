@@ -1,6 +1,7 @@
 #include "Window.h"
 
-Window::Window(int width, int heigth, const char * name) {
+Window::Window(int width, int heigth, const char * name) 
+{
 	RECT wr = { 0 };
 	wr.left = 100;
 	wr.top = 100;
@@ -13,24 +14,21 @@ Window::Window(int width, int heigth, const char * name) {
 		throw WINDOW_EXCEPTION();
 	}
 
-	windowHandle = CreateWindow(
+	m_windowHandle = CreateWindow(
 		WindowClass::GetWindowClassName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this);
-
-	if (windowHandle == 0)
+	if (m_windowHandle == 0)
 	{
 		throw WINDOW_EXCEPTION();
 	}
-	ShowWindow(windowHandle, SW_SHOWDEFAULT);
+	ShowWindow(m_windowHandle, SW_SHOWDEFAULT);
 }
 
-Window::~Window() {
-	if (DestroyWindow(windowHandle) == FALSE)
-	{
-		throw WINDOW_EXCEPTION();
-	}
+Window::~Window() noexcept
+{
+	DestroyWindow(m_windowHandle);
 }
 
 LRESULT Window::InitialMessageHandler(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
@@ -56,27 +54,20 @@ LRESULT Window::HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) 
 
 LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 {
-	switch (msg)
+
+	MessageReceived(WindowMessage(handle, msg, w, l));
+	if (msg == WM_CLOSE)
 	{
-	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
-		break;
-
-	case WM_KEYDOWN:
-		if (w == 'F')
-		{
-			SetWindowText(handle, "LOL");
-		}
-		break;
-	case WM_KEYUP:
-		if (w == 'F')
-		{
-			SetWindowText(handle, "LOL or is it?");
-		}
-		break;
 	}
+		
 	return DefWindowProc(handle, msg, w, l);
+}
+
+void Window::SetTitle(const char * title) const
+{
+	SetWindowText(m_windowHandle, title);
 }
 
 //STATIC WINDOW CLASS
@@ -94,7 +85,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 	return hInst;
 }
 
-Window::WindowClass::WindowClass()noexcept
+Window::WindowClass::WindowClass()
 {
 	hInst = GetModuleHandle(nullptr);
 
@@ -114,10 +105,7 @@ Window::WindowClass::WindowClass()noexcept
 	}
 }
 
-Window::WindowClass::~WindowClass()
+Window::WindowClass::~WindowClass() noexcept
 {
-	if (UnregisterClass(wndClassName, hInst) == FALSE)
-	{
-		throw WINDOW_EXCEPTION();
-	}
+	UnregisterClass(wndClassName, hInst);
 }

@@ -1,13 +1,13 @@
 #include "WindowException.h"
 #include <sstream>
 
-WindowException::WindowException(int line, const char * file) noexcept :
+WindowException::WindowException(int line, const char * file):
 	BaseException(line, file),
 	m_hr(GetLastError())
 {}
 
-WindowException::WindowException(int line, const char * file, HRESULT hr) noexcept :
-	BaseException(line, file),
+WindowException::WindowException(int line, const char * file, HRESULT hr):
+	BaseException(line,file),
 	m_hr(hr)
 {}
 

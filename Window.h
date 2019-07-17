@@ -2,15 +2,17 @@
 
 #include "MyWinHeader.h"
 #include "WindowException.h"
+#include "WindowMessage.h"
+#include <boost/signals2.hpp>
 
 class Window
 {
-private:
-	HWND windowHandle;
+private :
+	HWND m_windowHandle;
 
 public:
 	Window(int width, int height, const char* name);
-	~Window();
+	~Window()noexcept;
 	Window(const Window&) = delete;
 	Window& operator= (const Window&) = delete;
 
@@ -18,6 +20,10 @@ public:
 	static LRESULT CALLBACK HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
 
 	LRESULT HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
+
+	boost::signals2::signal<void (const WindowMessage&)> MessageReceived;
+
+	void SetTitle(const char* title) const;
 
 private:
 	class WindowClass
@@ -28,8 +34,8 @@ private:
 
 	private:
 
-		WindowClass() noexcept;
-		~WindowClass();
+		WindowClass();
+		~WindowClass() noexcept;
 
 		WindowClass(const WindowClass&) = delete;
 		WindowClass& operator=(const WindowClass&) = delete;
@@ -39,3 +45,5 @@ private:
 		static HINSTANCE hInst;
 	};
 };
+
+
