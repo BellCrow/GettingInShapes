@@ -23,6 +23,8 @@ public:
 
 	boost::signals2::signal<void (const WindowMessage&)> MessageReceived;
 
+	void SetTitle(const char* title) const;
+
 private:
 	class WindowClass
 	{

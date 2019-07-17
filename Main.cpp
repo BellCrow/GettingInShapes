@@ -7,8 +7,6 @@
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
 
-LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM w, LPARAM l);
-
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE pInstance,
@@ -20,8 +18,8 @@ int CALLBACK WinMain(
 		Window wnd(800, 300, "My first custom window");
 		Keyboard keyboard;
 
-		KeyboardWindowConnector sink = KeyboardWindowConnector(keyboard,wnd);
-
+		KeyboardWindowConnector connector = KeyboardWindowConnector(keyboard,wnd);
+		
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
@@ -42,7 +40,7 @@ int CALLBACK WinMain(
 	}
 	catch (const std::exception& e)
 	{
-		MessageBox(nullptr, e.what(), "Unknown exception creating windows", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
 
 	

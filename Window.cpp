@@ -65,6 +65,11 @@ LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 	return DefWindowProc(handle, msg, w, l);
 }
 
+void Window::SetTitle(const char * title) const
+{
+	SetWindowText(m_windowHandle, title);
+}
+
 //STATIC WINDOW CLASS
 
 HINSTANCE Window::WindowClass::hInst;
