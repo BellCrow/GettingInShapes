@@ -3,13 +3,17 @@
 #include "MyWinHeader.h"
 #include "WindowException.h"
 #include "WindowMessage.h"
-#include <boost/signals2.hpp>
+#include "IWindowMessageReceiver.h"
+#include <memory>
+#include <vector>
 
 class Window
 {
 private :
 	HWND m_windowHandle;
+	std::vector<std::shared_ptr<IWindowMessageReceiver>> _subscribers;
 
+	void FireEvent(const WindowMessage&);
 public:
 	Window(int width, int height, const char* name);
 	~Window()noexcept;
@@ -21,10 +25,8 @@ public:
 
 	LRESULT HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept;
 
-	boost::signals2::signal<void (const WindowMessage&)> MessageReceived;
-
 	void SetTitle(const char* title) const;
-
+	void Subscribe(std::shared_ptr<IWindowMessageReceiver>);
 private:
 	class WindowClass
 	{

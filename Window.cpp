@@ -1,6 +1,14 @@
 #include "Window.h"
 
-Window::Window(int width, int heigth, const char * name) 
+void Window::FireEvent(const WindowMessage& message)
+{
+	for (auto subscriber : _subscribers)
+	{
+		subscriber->HandleWindowEvent(message);
+	}
+}
+
+Window::Window(int width, int heigth, const char * name)
 {
 	RECT wr = { 0 };
 	wr.left = 100;
@@ -54,8 +62,7 @@ LRESULT Window::HandleMessageAdapter(HWND handle, UINT msg, WPARAM w, LPARAM l) 
 
 LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 {
-
-	MessageReceived(WindowMessage(handle, msg, w, l));
+	FireEvent(WindowMessage(handle, msg, w, l));
 	if (msg == WM_CLOSE)
 	{
 		PostQuitMessage(0);
@@ -68,6 +75,11 @@ LRESULT Window::HandleMsg(HWND handle, UINT msg, WPARAM w, LPARAM l) noexcept
 void Window::SetTitle(const char * title) const
 {
 	SetWindowText(m_windowHandle, title);
+}
+
+void Window::Subscribe(std::shared_ptr<IWindowMessageReceiver> subscriber)
+{
+	_subscribers.push_back(subscriber);
 }
 
 //STATIC WINDOW CLASS

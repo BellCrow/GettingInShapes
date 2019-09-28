@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
+#include "WindowToKeyboardPipe.h"
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -17,8 +18,11 @@ int CALLBACK WinMain(
 	{
 		Window wnd(800, 300, "My first custom window");
 		Keyboard keyboard;
+		auto connector = std::make_shared<KeyboardWindowConnector>(wnd);
+		keyboard.Subscribe(connector);
 
-		KeyboardWindowConnector connector = KeyboardWindowConnector(keyboard,wnd);
+		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
+		wnd.Subscribe(connector2);
 		
 		MSG msg = { 0 };
 
@@ -42,8 +46,6 @@ int CALLBACK WinMain(
 	{
 		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
-
 	
-
 	return EXIT_SUCCESS;
 }

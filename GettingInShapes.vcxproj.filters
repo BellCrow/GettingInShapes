@@ -22,6 +22,9 @@
     <Filter Include="Input\Keyboard">
       <UniqueIdentifier>{e2101297-284e-456c-9b2e-2bfa11ee1615}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ErrorHandling">
+      <UniqueIdentifier>{6b047747-1da2-4725-8e35-96f86e742a17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -29,9 +32,6 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>WindowHandling</Filter>
-    </ClCompile>
-    <ClCompile Include="MyException.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WindowException.cpp">
       <Filter>WindowHandling</Filter>
@@ -48,14 +48,17 @@
     <ClCompile Include="KeyboardMessage.cpp">
       <Filter>Input\Keyboard</Filter>
     </ClCompile>
+    <ClCompile Include="MyException.cpp">
+      <Filter>ErrorHandling</Filter>
+    </ClCompile>
     <ClCompile Include="KeyboardWindowConnector.cpp">
-      <Filter>Input\Keyboard</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowToKeyboardPipe.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyWinHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>WindowHandling</Filter>
     </ClInclude>
@@ -80,8 +83,20 @@
     <ClInclude Include="KeyboardEventType.h">
       <Filter>Input\Keyboard</Filter>
     </ClInclude>
-    <ClInclude Include="KeyboardWindowConnector.h">
+    <ClInclude Include="IKeyboardEventReceiver.h">
       <Filter>Input\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="MyWinHeader.h">
+      <Filter>ErrorHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="IWindowMessageReceiver.h">
+      <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardWindowConnector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowToKeyboardPipe.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

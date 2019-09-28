@@ -1,23 +1,14 @@
 #pragma once
-
+#include "IKeyboardEventReceiver.h"
 #include "Window.h"
-#include "Keyboard.h"
 
-class KeyboardWindowConnector
+class KeyboardWindowConnector : public IKeyboardEventReceiver
 {
 public:
-	KeyboardWindowConnector(Keyboard& keyboard, Window& window);
-	~KeyboardWindowConnector();
-
-	KeyboardWindowConnector(const KeyboardWindowConnector & rhs) = delete;
-	KeyboardWindowConnector(KeyboardWindowConnector && rhs) = delete;
-	KeyboardWindowConnector &operator = (const KeyboardWindowConnector & rhs) = delete;
-
+	KeyboardWindowConnector(const Window&);
+	// Inherited via IKeyboardEventReceiver
+	virtual void HandleKeyboardEvent(const KeyboardMessage&) override;
 private:
-	void HandleWindowMessage(const WindowMessage& message);
-
-private:
-	Keyboard& m_keyboard;
-	Window& m_window;
+	const Window& _window;
 };
 
