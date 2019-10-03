@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 
+
+#include "TriangleRenderer.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
@@ -24,6 +26,8 @@ int CALLBACK WinMain(
 		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
 		wnd.Subscribe(connector2);
 		
+		TriangleRenderer t = TriangleRenderer(wnd.GetWindowHandle());
+		
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
@@ -32,6 +36,7 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			t.RenderTriangles();
 		}
 		if (msg.message == WM_QUIT)
 		{

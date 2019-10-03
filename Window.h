@@ -8,12 +8,7 @@
 #include <vector>
 
 class Window
-{
-private :
-	HWND m_windowHandle;
-	std::vector<std::shared_ptr<IWindowMessageReceiver>> _subscribers;
-
-	void FireEvent(const WindowMessage&);
+{	
 public:
 	Window(int width, int height, const char* name);
 	~Window()noexcept;
@@ -27,7 +22,14 @@ public:
 
 	void SetTitle(const char* title) const;
 	void Subscribe(std::shared_ptr<IWindowMessageReceiver>);
+
+	HWND GetWindowHandle() { return m_windowHandle; }
 private:
+
+	HWND m_windowHandle;
+	std::vector<std::shared_ptr<IWindowMessageReceiver>> _subscribers;
+	void FireEvent(const WindowMessage&);
+	
 	class WindowClass
 	{
 	public:
