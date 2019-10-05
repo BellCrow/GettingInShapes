@@ -3,9 +3,12 @@
 #include <string>
 #include <sstream>
 
+#include "TriangleRenderer.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
+#include "WindowToKeyboardPipe.h"
+#include <iostream>
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -17,17 +20,24 @@ int CALLBACK WinMain(
 	{
 		Window wnd(800, 300, "My first custom window");
 		Keyboard keyboard;
+		auto connector = std::make_shared<KeyboardWindowConnector>(wnd);
+		keyboard.Subscribe(connector);
 
-		KeyboardWindowConnector connector = KeyboardWindowConnector(keyboard,wnd);
+		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
+		wnd.Subscribe(connector2);
+		
+		TriangleRenderer t = TriangleRenderer(wnd.GetWindowHandle());
 		
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
-
+		
 		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			std::cout << "T" << std::endl;
+			t.RenderTriangleFrame();
 		}
 		if (msg.message == WM_QUIT)
 		{
@@ -42,8 +52,6 @@ int CALLBACK WinMain(
 	{
 		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
-
 	
-
 	return EXIT_SUCCESS;
 }

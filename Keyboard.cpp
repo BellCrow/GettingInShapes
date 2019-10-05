@@ -7,16 +7,14 @@ Keyboard::Keyboard()
 	Reset();
 }
 
-
-Keyboard::~Keyboard()
-{
-}
+Keyboard::~Keyboard(){}
 
 void Keyboard::KeyDown(int keyCode)
 {
 	CheckKeyCode(keyCode);
 	m_keys[keyCode] = true;
-	KeyBoardEvent(KeyboardMessage(KeyboardEventType::KeyDownEvent, keyCode));
+	KeyboardMessage message = KeyboardMessage(KeyboardEventType::KeyDownEvent, keyCode);
+	FireEvent(message);
 }
 
 void Keyboard::CheckKeyCode(int keyCode) const
@@ -27,11 +25,20 @@ void Keyboard::CheckKeyCode(int keyCode) const
 	}
 }
 
+void Keyboard::FireEvent(const KeyboardMessage& keyboardEvent)
+{
+	for (auto eventSubscriber : _keyboardEventSubscriber)
+	{
+		eventSubscriber->HandleKeyboardEvent(keyboardEvent);
+	}
+}
+
 void Keyboard::KeyUp(int keyCode)
 {
 	CheckKeyCode(keyCode);
 	m_keys[keyCode] = false;
-	KeyBoardEvent(KeyboardMessage(KeyboardEventType::KeyUpEvent, keyCode));
+	KeyboardMessage message = KeyboardMessage(KeyboardEventType::KeyUpEvent, keyCode);
+	FireEvent(message);
 }
 
 bool Keyboard::IsKeyDown(int keyCode) const
@@ -46,4 +53,9 @@ void Keyboard::Reset() noexcept
 	{
 		m_keys[i] = false;
 	}
+}
+
+void Keyboard::Subscribe(const std::shared_ptr<IKeyboardEventReceiver> eventReceiver)
+{
+	_keyboardEventSubscriber.push_back(eventReceiver);
 }

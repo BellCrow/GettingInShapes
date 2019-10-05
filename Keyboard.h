@@ -1,11 +1,17 @@
 #pragma once
-#include <boost/signals2.hpp>
 #include "KeyboardMessage.h"
+#include "IKeyboardEventReceiver.h"
+
+
+#include <vector>
+#include <memory>
+
 class Keyboard
 {
 public:
 	static const int MaxKeys = 255;
-	boost::signals2::signal<void(KeyboardMessage)> KeyBoardEvent;
+
+	std::vector<std::shared_ptr<IKeyboardEventReceiver>> _keyboardEventSubscriber;
 
 	Keyboard();
 	~Keyboard();
@@ -14,8 +20,10 @@ public:
 	void KeyUp(int keyCode);
 	bool IsKeyDown(int keyCode) const;
 	void Reset() noexcept;
+	void Subscribe(const std::shared_ptr<IKeyboardEventReceiver>);
 private:
 	bool m_keys[MaxKeys];
 	void CheckKeyCode(int keyCode) const;
+	void FireEvent(const KeyboardMessage&);
 };
 
