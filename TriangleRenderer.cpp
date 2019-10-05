@@ -1,6 +1,7 @@
 #include "TriangleRenderer.h"
 #include <exception>
-#include <d3dcompiler.h>
+#include "Vertex.h"
+#include <sstream>;
 
 TriangleRenderer::TriangleRenderer(HWND handle)
 {
@@ -33,20 +34,92 @@ TriangleRenderer::~TriangleRenderer()
 		m_renderTargetView->Release();
 		m_renderTargetView = nullptr;
 	}
+
+	if (m_vertexShader != nullptr)
+	{
+		m_vertexShader->Release();
+		m_vertexShader = nullptr;
+	}
+
+	if (m_pixelShader != nullptr)
+	{
+		m_pixelShader->Release();
+		m_pixelShader = nullptr;
+	}
 }
 
-void TriangleRenderer::RenderTriangles()
+void TriangleRenderer::RenderTriangleFrame()
 {
-	// this is the function used to render a single frame
+	ClearRenderTarget();
 
+	// do 3D rendering on the back buffer here
+		
+	Vertex vertices[] =
+	{
+		Vertex(-0.5f,	0.5f, 0.0f,
+				0.0f, 0.5f, 0.0f, 1.0f),
+
+		Vertex(0.0f,	1.0f, 0.0f,
+				1.0f, 1.0f, 0.5f, 1.0f),
+
+		Vertex(0.0f,	0.0f, 0.0f,
+				0.5f, 1.0f, 1.0f, 1.0f),
+
+		Vertex(0.5f,	0.5f, 0.0f,
+				0.5f, 1.0f, 1.0f, 1.0f),
+	};
+
+	ID3D11Buffer* pVBuffer;    // global
+
+	D3D11_BUFFER_DESC bd = {};
+	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+	bd.ByteWidth = sizeof(vertices);             // size is the VERTEX struct * 3
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+
+	m_device->CreateBuffer(&bd, NULL, &pVBuffer);
+	
+	D3D11_MAPPED_SUBRESOURCE ms;
+	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);  
+	memcpy(ms.pData, vertices, sizeof(vertices) ); 
+	m_context->Unmap(pVBuffer, NULL);
+	
+	
+	ID3D11InputLayout* pLayout;    // global
+
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	m_device->CreateInputLayout(ied, 2,m_vertexShaderData->GetBufferPointer(),m_vertexShaderData->GetBufferSize(), &pLayout);
+	m_context->IASetInputLayout(pLayout);
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	m_context->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
+	// select which primtive type we are using
+	m_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// draw the vertex buffer to the back buffer
+	m_context->Draw(4, 0);
+
+
+	PresentFrame();
+}
+
+void TriangleRenderer::PresentFrame()
+{
+	// switch the back buffer and the front buffer
+	m_swapChain->Present(0, 0);
+}
+
+void TriangleRenderer::ClearRenderTarget()
+{
 	// clear the back buffer to a deep blue
 	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	m_context->ClearRenderTargetView(m_renderTargetView, color);
-
-	// do 3D rendering on the back buffer here
-	
-	// switch the back buffer and the front buffer
-	m_swapChain->Present(0, 0);
 }
 
 void TriangleRenderer::InitD3d()
@@ -57,7 +130,9 @@ void TriangleRenderer::InitD3d()
 
 	SetViewport();
 
-	CreateShaders();
+	InitShaders();
+
+	
 }
 
 void TriangleRenderer::SetViewport()
@@ -128,16 +203,28 @@ void TriangleRenderer::CreateBase3dObjects()
 	}
 }
 
-void TriangleRenderer::CreateShaders()
+void TriangleRenderer::InitShaders()
 {
 	// load and compile the two shaders
-	ID3D10Blob* VS, * PS;
+	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, &m_vertexShaderData, nullptr);
+	if (result != S_OK)
+	{
+		throw std::exception();
+	}
 	
-	D3DCompileFromFile(L"shaders.shader", 0, 0, "VShader", "vs_4_0", 0, 0, &VS, nullptr);
-	D3DCompileFromFile(L"shaders.shader", 0, 0, "PShader", "ps_4_0", 0, 0, &PS, nullptr);
+	ID3DBlob* error = nullptr;
+	result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, &m_pixelShaderData, &error);
+	if (result != S_OK)
+	{
+		auto ptr = error->GetBufferPointer();
+		throw std::exception();
+	}
 
 	// encapsulate both shaders into shader objects
-	m_device->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_vertexShader);
-	m_device->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_pixelShader);
-	
+	m_device->CreateVertexShader(m_vertexShaderData->GetBufferPointer(), m_vertexShaderData->GetBufferSize(), NULL, &m_vertexShader);
+	m_device->CreatePixelShader(m_pixelShaderData->GetBufferPointer(), m_pixelShaderData->GetBufferSize(), NULL, &m_pixelShader);
+
+	// set the shader objects
+	m_context->VSSetShader(m_vertexShader, 0, 0);
+	m_context->PSSetShader(m_pixelShader, 0, 0);
 }

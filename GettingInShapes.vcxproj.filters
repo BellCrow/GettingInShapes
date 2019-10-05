@@ -107,5 +107,11 @@
     <ClInclude Include="TriangleRenderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders.hlsl" />
   </ItemGroup>
 </Project>

@@ -3,12 +3,12 @@
 #include <string>
 #include <sstream>
 
-
 #include "TriangleRenderer.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
 #include "WindowToKeyboardPipe.h"
+#include <iostream>
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -31,12 +31,13 @@ int CALLBACK WinMain(
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
-
+		
 		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			t.RenderTriangles();
+			std::cout << "T" << std::endl;
+			t.RenderTriangleFrame();
 		}
 		if (msg.message == WM_QUIT)
 		{
