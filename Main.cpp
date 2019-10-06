@@ -3,7 +3,9 @@
 #include <string>
 #include <sstream>
 
-#include "TriangleRenderer.h"
+#include "Triangle.h"
+#include "TriangleWobbler.h"
+
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
@@ -26,18 +28,22 @@ int CALLBACK WinMain(
 		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
 		wnd.Subscribe(connector2);
 		
-		TriangleRenderer t = TriangleRenderer(wnd.GetWindowHandle());
-		
+		Triangle t = Triangle(wnd.GetWindowHandle(),Position(0,0.5f),1.0f,1.0f);
+		TriangleWobbler wobble = TriangleWobbler(t,1.0f,1.0f);
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
 		
-		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT) 
+		while (true)
+		{
+			wobble.Tick();
+		}
+
+		while ((result = PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) > 0 && msg.message != WM_QUIT)
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			std::cout << "T" << std::endl;
-			t.RenderTriangleFrame();
+			
 		}
 		if (msg.message == WM_QUIT)
 		{

@@ -4,6 +4,8 @@
 #include <d3d11.h>
 #include <d3d10.h>
 #include <d3dcompiler.h>
+#include "Position.h"
+#include "Vertex.h"
 
 
 #pragma comment (lib,"d3d11.lib")
@@ -11,14 +13,18 @@
 #pragma comment (lib,"D3DCompiler.lib")
 
 
-class TriangleRenderer
+class Triangle
 {
 public:
-	TriangleRenderer(HWND handle);
-	~TriangleRenderer();
+	Triangle(HWND handle, Position pos, float height, float width);
+	~Triangle();
 	void RenderTriangleFrame();
 	void PresentFrame();
 	void ClearRenderTarget();
+
+	void SetCenter(Position newPos);
+	void SetHeight(float height);
+	void SetWidth(float width);
 private:
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
@@ -40,5 +46,13 @@ private:
 	void SetRenderTarget();
 	void CreateBase3dObjects();
 	void InitShaders();
+
+
+	void UpdateVertices();
+
+	Vertex* m_vertexArray;
+	Position m_pos;
+	float m_height;
+	float m_width;
 };
 

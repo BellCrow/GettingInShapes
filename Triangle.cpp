@@ -1,15 +1,21 @@
-#include "TriangleRenderer.h"
+#include "Triangle.h"
 #include <exception>
 #include "Vertex.h"
 #include <sstream>;
+#include "Triangle.h"
 
-TriangleRenderer::TriangleRenderer(HWND handle)
+Triangle::Triangle(HWND handle, Position pos, float height, float width)
 {
 	m_handle = handle;
+	m_pos = pos;
+	m_height = height;
+	m_width = width;
+
 	InitD3d();
+	UpdateVertices();
 }
 
-TriangleRenderer::~TriangleRenderer()
+Triangle::~Triangle()
 {
 	if (m_context != nullptr)
 	{
@@ -48,32 +54,17 @@ TriangleRenderer::~TriangleRenderer()
 	}
 }
 
-void TriangleRenderer::RenderTriangleFrame()
+void Triangle::RenderTriangleFrame()
 {
 	ClearRenderTarget();
 
-	// do 3D rendering on the back buffer here
-		
-	Vertex vertices[] =
-	{
-		Vertex(-0.5f,	0.5f, 0.0f,
-				0.0f, 0.5f, 0.0f, 1.0f),
-
-		Vertex(0.0f,	1.0f, 0.0f,
-				1.0f, 1.0f, 0.5f, 1.0f),
-
-		Vertex(0.0f,	0.0f, 0.0f,
-				0.5f, 1.0f, 1.0f, 1.0f),
-
-		Vertex(0.5f,	0.5f, 0.0f,
-				0.5f, 1.0f, 1.0f, 1.0f),
-	};
+	// do 3D rendering on the back buffer here	
 
 	ID3D11Buffer* pVBuffer;    // global
 
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-	bd.ByteWidth = sizeof(vertices);             // size is the VERTEX struct * 3
+	bd.ByteWidth = sizeof(Vertex) * 4;             // size is a single Vertex * 4
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
@@ -81,7 +72,7 @@ void TriangleRenderer::RenderTriangleFrame()
 	
 	D3D11_MAPPED_SUBRESOURCE ms;
 	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);  
-	memcpy(ms.pData, vertices, sizeof(vertices) ); 
+	memcpy(ms.pData, m_vertexArray, sizeof(Vertex) * 4); 
 	m_context->Unmap(pVBuffer, NULL);
 	
 	
@@ -104,25 +95,114 @@ void TriangleRenderer::RenderTriangleFrame()
 
 	// draw the vertex buffer to the back buffer
 	m_context->Draw(4, 0);
-
-
 	PresentFrame();
 }
 
-void TriangleRenderer::PresentFrame()
+void Triangle::PresentFrame()
 {
 	// switch the back buffer and the front buffer
 	m_swapChain->Present(0, 0);
 }
 
-void TriangleRenderer::ClearRenderTarget()
+void Triangle::ClearRenderTarget()
 {
 	// clear the back buffer to a deep blue
 	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	m_context->ClearRenderTargetView(m_renderTargetView, color);
 }
 
-void TriangleRenderer::InitD3d()
+void Triangle::SetCenter(Position newPos)
+{
+	this->m_pos = newPos;
+	UpdateVertices();
+}
+
+void Triangle::SetHeight(float height)
+{
+	m_height = height;
+	UpdateVertices();
+}
+
+void Triangle::SetWidth(float width)
+{
+	m_width = width;
+	UpdateVertices();
+}
+
+void Triangle::UpdateVertices()
+{
+	delete m_vertexArray;
+	m_vertexArray = new Vertex[4];
+
+	//setup the colors
+	m_vertexArray[0].a = 1.0f;
+	m_vertexArray[0].r = 0.0f;
+	m_vertexArray[0].g = 0.5f;
+	m_vertexArray[0].b = 0.0f;
+	
+	m_vertexArray[1].a = 1.0f;
+	m_vertexArray[1].r = 1.0f;
+	m_vertexArray[1].g = 1.0f;
+	m_vertexArray[1].b = 0.5f;
+	
+	m_vertexArray[2].a = 1.0f;
+	m_vertexArray[2].r = 0.5f;
+	m_vertexArray[2].g = 1.0f;
+	m_vertexArray[2].b = 1.0f;
+
+	m_vertexArray[3].a = 1.0f;
+	m_vertexArray[3].r = 0.5f;
+	m_vertexArray[3].g = 1.0f;
+	m_vertexArray[3].b = 1.0f;
+	
+	//end colors
+
+	/*Vertex vertices[] =
+	{
+		Vertex(-0.5f,	0.5f, 0.0f,
+				0.0f, 0.5f, 0.0f, 1.0f),
+
+		Vertex(0.0f,	1.0f, 0.0f,
+				1.0f, 1.0f, 0.5f, 1.0f),
+
+		Vertex(0.0f,	0.0f, 0.0f,
+				0.5f, 1.0f, 1.0f, 1.0f),
+
+		Vertex(0.5f,	0.5f, 0.0f,
+				0.5f, 1.0f, 1.0f, 1.0f),
+	};*/
+
+	float x = 0;
+	float y = 0;
+	//point 0
+	
+	x = m_pos.x - m_width / 2;
+	y = m_pos.y;
+	m_vertexArray[0].x = x;
+	m_vertexArray[0].y = y;
+	m_vertexArray[0].z = 0.0f;
+
+	x = m_pos.x;
+	y = m_pos.y + m_height / 2;
+	m_vertexArray[1].x = x;
+	m_vertexArray[1].y = y;
+	m_vertexArray[1].z = 0.0f;
+
+	x = m_pos.x;
+	y = m_pos.y - m_height / 2;
+	m_vertexArray[2].x = x;
+	m_vertexArray[2].y = y;
+	m_vertexArray[2].z = 0.0f;
+
+	x = m_pos.x + m_width / 2;
+	y = m_pos.y;
+	m_vertexArray[3].x = x;
+	m_vertexArray[3].y = y;
+	m_vertexArray[3].z = 0.0f;
+
+}
+
+void Triangle::InitD3d()
 {
 	CreateBase3dObjects();
 
@@ -130,12 +210,10 @@ void TriangleRenderer::InitD3d()
 
 	SetViewport();
 
-	InitShaders();
-
-	
+	InitShaders();	
 }
 
-void TriangleRenderer::SetViewport()
+void Triangle::SetViewport()
 {
 	// Set the viewport
 	D3D11_VIEWPORT viewport;
@@ -149,7 +227,7 @@ void TriangleRenderer::SetViewport()
 	m_context->RSSetViewports(1, &viewport);
 }
 
-void TriangleRenderer::SetRenderTarget()
+void Triangle::SetRenderTarget()
 {
 	// get the address of the back buffer
 	ID3D11Texture2D* backBuffer;
@@ -166,7 +244,7 @@ void TriangleRenderer::SetRenderTarget()
 	m_context->OMSetRenderTargets(1, &m_renderTargetView, NULL);
 }
 
-void TriangleRenderer::CreateBase3dObjects()
+void Triangle::CreateBase3dObjects()
 {
 	// create a struct to hold information about the swap chain
 	DXGI_SWAP_CHAIN_DESC swapChainDescription;
@@ -203,7 +281,7 @@ void TriangleRenderer::CreateBase3dObjects()
 	}
 }
 
-void TriangleRenderer::InitShaders()
+void Triangle::InitShaders()
 {
 	// load and compile the two shaders
 	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, &m_vertexShaderData, nullptr);
@@ -228,3 +306,4 @@ void TriangleRenderer::InitShaders()
 	m_context->VSSetShader(m_vertexShader, 0, 0);
 	m_context->PSSetShader(m_pixelShader, 0, 0);
 }
+

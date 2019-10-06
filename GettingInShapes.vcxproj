@@ -156,7 +156,8 @@
     <ClCompile Include="KeyboardWindowConnector.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyException.cpp" />
-    <ClCompile Include="TriangleRenderer.cpp" />
+    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="TriangleWobbler.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowException.cpp" />
     <ClCompile Include="WindowMessage.cpp" />
@@ -172,7 +173,9 @@
     <ClInclude Include="KeyboardWindowConnector.h" />
     <ClInclude Include="MyException.h" />
     <ClInclude Include="MyWinHeader.h" />
-    <ClInclude Include="TriangleRenderer.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="TriangleWobbler.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowException.h" />

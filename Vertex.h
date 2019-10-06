@@ -1,6 +1,17 @@
 #pragma once
 struct Vertex
 {
+	Vertex()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+		r = 0;
+		g = 0;
+		b = 0;
+		a = 0;
+	}
+	
 	Vertex(float a_x,float a_y,float a_z,float a_r,float a_g,float a_b,float a_a)
 	{
 		x = a_x;
