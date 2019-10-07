@@ -60,10 +60,10 @@
     <ClCompile Include="WindowToKeyboardPipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TriangleWobbler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Rhombus.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleWobbler.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>

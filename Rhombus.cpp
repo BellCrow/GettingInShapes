@@ -74,8 +74,7 @@ void Rhombus::RenderTriangleFrame()
 	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);  
 	memcpy(ms.pData, m_vertexArray, sizeof(Vertex) * 4); 
 	m_context->Unmap(pVBuffer, NULL);
-	
-	
+		
 	ID3D11InputLayout* pLayout;    // global
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
@@ -96,6 +95,8 @@ void Rhombus::RenderTriangleFrame()
 	// draw the vertex buffer to the back buffer
 	m_context->Draw(4, 0);
 	PresentFrame();
+	pVBuffer->Release();
+	pLayout->Release();
 }
 
 void Rhombus::PresentFrame()
@@ -131,7 +132,7 @@ void Rhombus::SetWidth(float width)
 
 void Rhombus::UpdateVertices()
 {
-	delete m_vertexArray;
+	delete[] m_vertexArray;
 	m_vertexArray = new Vertex[4];
 
 	//setup the colors
