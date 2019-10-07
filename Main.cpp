@@ -1,16 +1,18 @@
 #include "MyWinHeader.h"
-
-#include <string>
-#include <sstream>
-
-#include "Triangle.h"
+#include "Rhombus.h"
 #include "TriangleWobbler.h"
-
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
 #include "WindowToKeyboardPipe.h"
+
+
+
+#include <string>
+#include <sstream>
 #include <iostream>
+#include <thread>
+
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -28,18 +30,21 @@ int CALLBACK WinMain(
 		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
 		wnd.Subscribe(connector2);
 		
-		Triangle t = Triangle(wnd.GetWindowHandle(),Position(0,0.5f),1.0f,1.0f);
+		Rhombus t = Rhombus(wnd.GetWindowHandle(),Position(0,0.5f),1.0f,1.0f);
 		TriangleWobbler wobble = TriangleWobbler(t,1.0f,1.0f);
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
-		
-		while (true)
-		{
-			wobble.Tick();
-		}
+		bool continueRender = true;
+		std::thread renderThread = std::thread([&wobble, &continueRender]()
+			{
+				while (continueRender)
+				{
+					wobble.Tick();
+				}
+			});
 
-		while ((result = PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) > 0 && msg.message != WM_QUIT)
+		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT)
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -47,6 +52,8 @@ int CALLBACK WinMain(
 		}
 		if (msg.message == WM_QUIT)
 		{
+			continueRender = false;
+			renderThread.join();
 			return msg.wParam;
 		}
 	}

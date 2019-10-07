@@ -60,11 +60,11 @@
     <ClCompile Include="WindowToKeyboardPipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="TriangleWobbler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rhombus.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,11 +113,11 @@
     <ClInclude Include="Position.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="TriangleWobbler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rhombus.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

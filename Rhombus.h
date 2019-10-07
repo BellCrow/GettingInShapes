@@ -13,11 +13,11 @@
 #pragma comment (lib,"D3DCompiler.lib")
 
 
-class Triangle
+class Rhombus
 {
 public:
-	Triangle(HWND handle, Position pos, float height, float width);
-	~Triangle();
+	Rhombus(HWND handle, Position pos, float height, float width);
+	~Rhombus();
 	void RenderTriangleFrame();
 	void PresentFrame();
 	void ClearRenderTarget();

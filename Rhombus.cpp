@@ -1,10 +1,10 @@
-#include "Triangle.h"
+#include "Rhombus.h"
 #include <exception>
 #include "Vertex.h"
 #include <sstream>;
-#include "Triangle.h"
+#include "Rhombus.h"
 
-Triangle::Triangle(HWND handle, Position pos, float height, float width)
+Rhombus::Rhombus(HWND handle, Position pos, float height, float width)
 {
 	m_handle = handle;
 	m_pos = pos;
@@ -15,7 +15,7 @@ Triangle::Triangle(HWND handle, Position pos, float height, float width)
 	UpdateVertices();
 }
 
-Triangle::~Triangle()
+Rhombus::~Rhombus()
 {
 	if (m_context != nullptr)
 	{
@@ -54,7 +54,7 @@ Triangle::~Triangle()
 	}
 }
 
-void Triangle::RenderTriangleFrame()
+void Rhombus::RenderTriangleFrame()
 {
 	ClearRenderTarget();
 
@@ -98,38 +98,38 @@ void Triangle::RenderTriangleFrame()
 	PresentFrame();
 }
 
-void Triangle::PresentFrame()
+void Rhombus::PresentFrame()
 {
 	// switch the back buffer and the front buffer
 	m_swapChain->Present(0, 0);
 }
 
-void Triangle::ClearRenderTarget()
+void Rhombus::ClearRenderTarget()
 {
 	// clear the back buffer to a deep blue
 	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	m_context->ClearRenderTargetView(m_renderTargetView, color);
 }
 
-void Triangle::SetCenter(Position newPos)
+void Rhombus::SetCenter(Position newPos)
 {
 	this->m_pos = newPos;
 	UpdateVertices();
 }
 
-void Triangle::SetHeight(float height)
+void Rhombus::SetHeight(float height)
 {
 	m_height = height;
 	UpdateVertices();
 }
 
-void Triangle::SetWidth(float width)
+void Rhombus::SetWidth(float width)
 {
 	m_width = width;
 	UpdateVertices();
 }
 
-void Triangle::UpdateVertices()
+void Rhombus::UpdateVertices()
 {
 	delete m_vertexArray;
 	m_vertexArray = new Vertex[4];
@@ -156,26 +156,10 @@ void Triangle::UpdateVertices()
 	m_vertexArray[3].b = 1.0f;
 	
 	//end colors
-
-	/*Vertex vertices[] =
-	{
-		Vertex(-0.5f,	0.5f, 0.0f,
-				0.0f, 0.5f, 0.0f, 1.0f),
-
-		Vertex(0.0f,	1.0f, 0.0f,
-				1.0f, 1.0f, 0.5f, 1.0f),
-
-		Vertex(0.0f,	0.0f, 0.0f,
-				0.5f, 1.0f, 1.0f, 1.0f),
-
-		Vertex(0.5f,	0.5f, 0.0f,
-				0.5f, 1.0f, 1.0f, 1.0f),
-	};*/
-
+	
 	float x = 0;
 	float y = 0;
-	//point 0
-	
+		
 	x = m_pos.x - m_width / 2;
 	y = m_pos.y;
 	m_vertexArray[0].x = x;
@@ -202,7 +186,7 @@ void Triangle::UpdateVertices()
 
 }
 
-void Triangle::InitD3d()
+void Rhombus::InitD3d()
 {
 	CreateBase3dObjects();
 
@@ -213,7 +197,7 @@ void Triangle::InitD3d()
 	InitShaders();	
 }
 
-void Triangle::SetViewport()
+void Rhombus::SetViewport()
 {
 	// Set the viewport
 	D3D11_VIEWPORT viewport;
@@ -227,7 +211,7 @@ void Triangle::SetViewport()
 	m_context->RSSetViewports(1, &viewport);
 }
 
-void Triangle::SetRenderTarget()
+void Rhombus::SetRenderTarget()
 {
 	// get the address of the back buffer
 	ID3D11Texture2D* backBuffer;
@@ -244,7 +228,7 @@ void Triangle::SetRenderTarget()
 	m_context->OMSetRenderTargets(1, &m_renderTargetView, NULL);
 }
 
-void Triangle::CreateBase3dObjects()
+void Rhombus::CreateBase3dObjects()
 {
 	// create a struct to hold information about the swap chain
 	DXGI_SWAP_CHAIN_DESC swapChainDescription;
@@ -281,7 +265,7 @@ void Triangle::CreateBase3dObjects()
 	}
 }
 
-void Triangle::InitShaders()
+void Rhombus::InitShaders()
 {
 	// load and compile the two shaders
 	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, &m_vertexShaderData, nullptr);
