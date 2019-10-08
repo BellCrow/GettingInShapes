@@ -4,7 +4,7 @@ class Triangle :
 	public AbstractShape
 {
 public:
-	Triangle(Point center, float width, float height);
+	Triangle(Point center, float width, float height, Color color);
 
 	// Inherited via AbstractShape
 	virtual void SetHeight(float) override;
@@ -12,5 +12,8 @@ public:
 	virtual void SetPosition(Point) override;
 private:
 	void CalculateTriangles();
+
+	// Inherited via AbstractShape
+	virtual void SetColor(Color) override;
 };
 

@@ -31,6 +31,9 @@
     <Filter Include="Rendering\Shapes">
       <UniqueIdentifier>{2e4eae4f-457d-4cd6-b378-2939e38c6ccc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Animations">
+      <UniqueIdentifier>{8b5c170d-e7a8-41ea-8d14-0996ddc46501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="SceneBoard.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="WobbleAnimation.cpp">
+      <Filter>Rendering\Animations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="SceneBoard.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Rendering\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="WobbleAnimation.h">
+      <Filter>Rendering\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractAnimation.h">
+      <Filter>Rendering\Animations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

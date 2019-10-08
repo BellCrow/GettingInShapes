@@ -1,10 +1,8 @@
 #include "Triangle.h"
 
-Triangle::Triangle(Point center, float width, float height)
+Triangle::Triangle(Point center, float width, float height, Color color)
+	:AbstractShape(center, width, height, color)
 {
-	m_position = center;
-	m_width = width;
-	m_height = height;
 	CalculateTriangles();
 }
 
@@ -35,5 +33,10 @@ void Triangle::CalculateTriangles()
 	Point b = Point(m_position.x, m_position.y + h2);
 	Point c = Point(m_position.x + w2, m_position.y - h2);
 	m_triangles.push_back(RenderTriangle(a, b, c));
+}
+
+void Triangle::SetColor(Color color)
+{
+	m_color = color;
 }
 

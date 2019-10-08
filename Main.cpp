@@ -4,13 +4,16 @@
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
 #include "WindowToKeyboardPipe.h"
+#include "SceneBoard.h"
+#include "Triangle.h"
+#include "Rhombus.h"
+#include "WobbleAnimation.h"
 
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <thread>
-#include "SceneBoard.h"
-#include "Triangle.h"
+
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -23,24 +26,38 @@ int CALLBACK WinMain(
 		Window wnd(800, 300, "My first custom window");
 		
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
-		AbstractShape* t = new Triangle(Point(0, 0), 1, 1);
-		AbstractShape* t2 = new Triangle(Point(0.3, 0.3), 0.2f, 0.4f);
-		sb.AddShape(t);
-		sb.AddShape(t2);
-		sb.AddShape(new Triangle(Point(-0.3, 0.3), 0.4f, 0.2f));
+				
+		auto rhombus = new Rhombus(Point(0.0f, 0.5f), .3f, 2.0f, Color(1.0, 0.2f, .7f, .9f));
+
+		sb.AddShape(rhombus);
+		sb.AddShape(new Rhombus(Point(-.9f, 0.5f), .3f, 2.0f, Color(1.0, .8f, .7f, .9f)));
+
+		auto animation = new WobbleAnimation(rhombus, 5, 0, 1.0f, 0, 1.0f);
+		sb.AddAnimation(animation);
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
-		
+		bool continueRender = true;
+		std::thread renderThread = std::thread([&continueRender, &sb]()
+			{
+				while (continueRender)
+				{
+					sb.Tick();
+					sb.Render();
+				}
+			});
+
+
 		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT)
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			sb.Render();
 		}
 		if (msg.message == WM_QUIT)
 		{
-			return msg.wParam;
+			continueRender = false;
+			renderThread.join();
+			return static_cast<int>(msg.wParam);
 		}
 	}
 	catch (const WindowException& e)

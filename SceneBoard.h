@@ -9,6 +9,7 @@
 #include <d3d10.h>
 #include <d3dcompiler.h>
 #include <vector>
+#include "AbstractAnimation.h"
 
 #pragma comment (lib,"d3d11.lib")
 #pragma comment (lib,"d3d10.lib")
@@ -17,8 +18,8 @@
 class SceneBoard
 {
 	std::vector<AbstractShape*> m_shapes;
-
-
+	std::vector<AbstractAnimation*> m_animations;
+	
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_context;
@@ -37,16 +38,18 @@ class SceneBoard
 	void SetRenderTarget();
 	void CreateBase3dObjects();
 	void InitShaders();
+	void ClearRenderTarget();
 
 	Point m_pos;
 	float m_height;
 	float m_width;
-
 
 public:
 	SceneBoard(HWND windowHandle);
 	void Tick();
 	void Render();
 	void AddShape(AbstractShape* shape);
+	void AddAnimation(AbstractAnimation* animation);
+
 };
 

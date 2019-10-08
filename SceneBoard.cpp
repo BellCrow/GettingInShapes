@@ -9,15 +9,19 @@ SceneBoard::SceneBoard(HWND windowHandle):m_handle(windowHandle)
 
 void SceneBoard::Tick()
 {
-	//TODO: add animation ticks here
+	for (auto animation : m_animations)
+	{
+		animation->Tick();
+	}
 }
 
 void SceneBoard::Render()
 {	
+	ClearRenderTarget();
 	int triangleCount = 0;
 	for (auto& shape : m_shapes)
 	{
-		triangleCount += shape->GetTriangles().size();
+		triangleCount += static_cast<int>(shape->GetTriangles().size());
 	}
 	int vertexCount = triangleCount * 3;
 	int vertexBufferByteCount = vertexCount * sizeof(Vertex);
@@ -28,40 +32,43 @@ void SceneBoard::Render()
 
 	for (auto shape : m_shapes)
 	{
-		for (auto triangle : shape->GetTriangles())
+		auto shapeColor = shape->GetColor();
+		auto triangles = shape->GetTriangles();
+		for (auto triangle : triangles)
 		{
 			//POINT A
-			vertexArray[vertexWritePointer].a = 1.0f;
-			vertexArray[vertexWritePointer].r = 0.5f;
-			vertexArray[vertexWritePointer].g = 0.5f;
-			vertexArray[vertexWritePointer].b = 0.5f;
+			vertexArray[vertexWritePointer].a = shapeColor.A;
+			vertexArray[vertexWritePointer].r = shapeColor.R;
+			vertexArray[vertexWritePointer].g = shapeColor.G;
+			vertexArray[vertexWritePointer].b = shapeColor.B;
 
 			vertexArray[vertexWritePointer].x = triangle.pointA.x;
 			vertexArray[vertexWritePointer].y = triangle.pointA.y;
 			vertexArray[vertexWritePointer].z = 1.0f;
 
 			//POINT B
-			vertexArray[vertexWritePointer + 1].a = 1.0f;
-			vertexArray[vertexWritePointer + 1].r = 0.5f;
-			vertexArray[vertexWritePointer + 1].g = 0.5f;
-			vertexArray[vertexWritePointer + 1].b = 0.5f;
+			vertexArray[vertexWritePointer + 1].a = shapeColor.A;
+			vertexArray[vertexWritePointer + 1].r = shapeColor.R;
+			vertexArray[vertexWritePointer + 1].g = shapeColor.G;
+			vertexArray[vertexWritePointer + 1].b = shapeColor.B;
 
 			vertexArray[vertexWritePointer + 1].x = triangle.pointB.x;
 			vertexArray[vertexWritePointer + 1].y = triangle.pointB.y;
 			vertexArray[vertexWritePointer + 1].z = 1.0f;
 
 			//POINT C
-			vertexArray[vertexWritePointer + 2].a = 1.0f;
-			vertexArray[vertexWritePointer + 2].r = 0.5f;
-			vertexArray[vertexWritePointer + 2].g = 0.5f;
-			vertexArray[vertexWritePointer + 2].b = 0.5f;
+			vertexArray[vertexWritePointer + 2].a = shapeColor.A;
+			vertexArray[vertexWritePointer + 2].r = shapeColor.R;
+			vertexArray[vertexWritePointer + 2].g = shapeColor.G;
+			vertexArray[vertexWritePointer + 2].b = shapeColor.B;
 
 			vertexArray[vertexWritePointer + 2].x = triangle.pointC.x;
 			vertexArray[vertexWritePointer + 2].y = triangle.pointC.y;
 			vertexArray[vertexWritePointer + 2].z = 1.0f;
-
+			
+			vertexWritePointer += 3;
 		}
-		vertexWritePointer += 3;
+		
 	}
 
 	
@@ -111,6 +118,11 @@ void SceneBoard::AddShape(AbstractShape* shape)
 	m_shapes.push_back(shape);
 }
 
+void SceneBoard::AddAnimation(AbstractAnimation* animation)
+{
+	m_animations.push_back(animation);
+}
+
 
 void SceneBoard::InitD3d()
 {
@@ -131,8 +143,8 @@ void SceneBoard::SetViewport()
 
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	viewport.Width = 800;
-	viewport.Height = 600;
+	viewport.Width = 1024;
+	viewport.Height = 786;
 
 	m_context->RSSetViewports(1, &viewport);
 }
@@ -215,5 +227,12 @@ void SceneBoard::InitShaders()
 	// set the shader objects
 	m_context->VSSetShader(m_vertexShader, 0, 0);
 	m_context->PSSetShader(m_pixelShader, 0, 0);
+}
+
+void SceneBoard::ClearRenderTarget()
+{
+	// clear the back buffer to a deep blue
+	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	m_context->ClearRenderTargetView(m_renderTargetView, color);
 }
 
