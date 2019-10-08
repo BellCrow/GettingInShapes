@@ -3,12 +3,6 @@
 #include "AbstractShape.h"
 #include "AbstractAnimation.h"
 
-enum AnimationState
-{
-	ChangingWidth = 0,
-	ChangingHeight = 1
-};
-
 class WobbleAnimation:public AbstractAnimation
 {
 public:
@@ -22,6 +16,5 @@ private:
 	float m_maxWidth;
 	float m_minHeight;
 	float m_maxHeight;
-	AnimationState m_animationState;
 };
 

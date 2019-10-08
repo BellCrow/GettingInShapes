@@ -7,10 +7,13 @@
 #include "SceneBoard.h"
 #include "Triangle.h"
 #include "Rhombus.h"
-#include "WobbleAnimation.h"
+#include "AlternatingWobbleAnimation.h"
+#include "SinusWave.h"
+#include "TimeHelper.h"
 
-#include <string>
+
 #include <sstream>
+#include <string>
 #include <iostream>
 #include <thread>
 
@@ -28,12 +31,12 @@ int CALLBACK WinMain(
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 				
 		auto rhombus = new Rhombus(Point(0.0f, 0.5f), .3f, 2.0f, Color(1.0, 0.2f, .7f, .9f));
-
 		sb.AddShape(rhombus);
-		sb.AddShape(new Rhombus(Point(-.9f, 0.5f), .3f, 2.0f, Color(1.0, .8f, .7f, .9f)));
 
-		auto animation = new WobbleAnimation(rhombus, 5, 0, 1.0f, 0, 1.0f);
+		auto animation = new AlternatingWobbleAnimation(rhombus, 5000, 0.1, 1.0f, 0.1, 1.0f);
 		sb.AddAnimation(animation);
+
+
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
@@ -46,7 +49,6 @@ int CALLBACK WinMain(
 					sb.Render();
 				}
 			});
-
 
 		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT)
 		{

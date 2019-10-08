@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlternatingWobbleAnimation.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyboardException.cpp" />
     <ClCompile Include="KeyboardMessage.cpp" />
@@ -159,6 +160,8 @@
     <ClCompile Include="Rhombus.cpp" />
     <ClCompile Include="RenderTriangle.cpp" />
     <ClCompile Include="SceneBoard.cpp" />
+    <ClCompile Include="SinusWave.cpp" />
+    <ClCompile Include="TimeHelper.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowException.cpp" />
@@ -169,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractShape.h" />
+    <ClInclude Include="AlternatingWobbleAnimation.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="IWindowMessageReceiver.h" />
     <ClInclude Include="Keyboard.h" />
@@ -183,6 +187,8 @@
     <ClInclude Include="Rhombus.h" />
     <ClInclude Include="RenderTriangle.h" />
     <ClInclude Include="SceneBoard.h" />
+    <ClInclude Include="SinusWave.h" />
+    <ClInclude Include="TimeHelper.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
