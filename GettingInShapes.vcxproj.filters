@@ -28,6 +28,9 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{b62582c3-0e16-424f-98ec-2963da4509ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Shapes">
+      <UniqueIdentifier>{2e4eae4f-457d-4cd6-b378-2939e38c6ccc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -61,9 +64,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rhombus.cpp">
+      <Filter>Rendering\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTriangle.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="TriangleWobbler.cpp">
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Rendering\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBoard.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,13 +119,22 @@
     <ClInclude Include="Vertex.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Position.h">
+    <ClInclude Include="Point.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="TriangleWobbler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AbstractShape.h">
+      <Filter>Rendering\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Rhombus.h">
+      <Filter>Rendering\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTriangle.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Rendering\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBoard.h">
       <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>

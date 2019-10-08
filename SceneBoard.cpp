@@ -1,80 +1,86 @@
-#include "Rhombus.h"
-#include <exception>
-#include "Vertex.h"
-#include <sstream>;
-#include "Rhombus.h"
+#include "SceneBoard.h"
+#include <memory>
+#include <array>
 
-Rhombus::Rhombus(HWND handle, Point pos, float height, float width)
+SceneBoard::SceneBoard(HWND windowHandle):m_handle(windowHandle)
 {
-	m_handle = handle;
-	m_pos = pos;
-	m_height = height;
-	m_width = width;
-
 	InitD3d();
-	UpdateVertices();
 }
 
-Rhombus::~Rhombus()
+void SceneBoard::Tick()
 {
-	if (m_context != nullptr)
-	{
-		m_context->Release();
-		m_context = nullptr;
-	}
-
-	if (m_device != nullptr)
-	{
-		m_device->Release();
-		m_device = nullptr;
-	}
-
-	if (m_swapChain != nullptr)
-	{
-		m_swapChain->Release();
-		m_swapChain = nullptr;
-	}
-
-	if (m_renderTargetView != nullptr)
-	{
-		m_renderTargetView->Release();
-		m_renderTargetView = nullptr;
-	}
-
-	if (m_vertexShader != nullptr)
-	{
-		m_vertexShader->Release();
-		m_vertexShader = nullptr;
-	}
-
-	if (m_pixelShader != nullptr)
-	{
-		m_pixelShader->Release();
-		m_pixelShader = nullptr;
-	}
+	//TODO: add animation ticks here
 }
 
-void Rhombus::RenderTriangleFrame()
-{
-	ClearRenderTarget();
+void SceneBoard::Render()
+{	
+	int triangleCount = 0;
+	for (auto& shape : m_shapes)
+	{
+		triangleCount += shape->GetTriangles().size();
+	}
+	int vertexCount = triangleCount * 3;
+	int vertexBufferByteCount = vertexCount * sizeof(Vertex);
 
-	// do 3D rendering on the back buffer here	
+	auto vertexArray = std::make_unique<Vertex[]>(vertexCount);
 
+	int vertexWritePointer = 0;
+
+	for (auto shape : m_shapes)
+	{
+		for (auto triangle : shape->GetTriangles())
+		{
+			//POINT A
+			vertexArray[vertexWritePointer].a = 1.0f;
+			vertexArray[vertexWritePointer].r = 0.5f;
+			vertexArray[vertexWritePointer].g = 0.5f;
+			vertexArray[vertexWritePointer].b = 0.5f;
+
+			vertexArray[vertexWritePointer].x = triangle.pointA.x;
+			vertexArray[vertexWritePointer].y = triangle.pointA.y;
+			vertexArray[vertexWritePointer].z = 1.0f;
+
+			//POINT B
+			vertexArray[vertexWritePointer + 1].a = 1.0f;
+			vertexArray[vertexWritePointer + 1].r = 0.5f;
+			vertexArray[vertexWritePointer + 1].g = 0.5f;
+			vertexArray[vertexWritePointer + 1].b = 0.5f;
+
+			vertexArray[vertexWritePointer + 1].x = triangle.pointB.x;
+			vertexArray[vertexWritePointer + 1].y = triangle.pointB.y;
+			vertexArray[vertexWritePointer + 1].z = 1.0f;
+
+			//POINT C
+			vertexArray[vertexWritePointer + 2].a = 1.0f;
+			vertexArray[vertexWritePointer + 2].r = 0.5f;
+			vertexArray[vertexWritePointer + 2].g = 0.5f;
+			vertexArray[vertexWritePointer + 2].b = 0.5f;
+
+			vertexArray[vertexWritePointer + 2].x = triangle.pointC.x;
+			vertexArray[vertexWritePointer + 2].y = triangle.pointC.y;
+			vertexArray[vertexWritePointer + 2].z = 1.0f;
+
+		}
+		vertexWritePointer += 3;
+	}
+
+	
 	ID3D11Buffer* pVBuffer;    // global
 
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-	bd.ByteWidth = sizeof(Vertex) * 4;             // size is a single Vertex * 4
+	bd.ByteWidth = vertexBufferByteCount;             
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
 	m_device->CreateBuffer(&bd, NULL, &pVBuffer);
-	
+
 	D3D11_MAPPED_SUBRESOURCE ms;
-	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);  
-	memcpy(ms.pData, m_vertexArray, sizeof(Vertex) * 4); 
+	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+	auto vertexPtr = vertexArray.get();
+	memcpy(ms.pData, vertexPtr, vertexBufferByteCount);
 	m_context->Unmap(pVBuffer, NULL);
-		
+
 	ID3D11InputLayout* pLayout;    // global
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
@@ -83,111 +89,30 @@ void Rhombus::RenderTriangleFrame()
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	m_device->CreateInputLayout(ied, 2,m_vertexShaderData->GetBufferPointer(),m_vertexShaderData->GetBufferSize(), &pLayout);
+	m_device->CreateInputLayout(ied, 2, m_vertexShaderData->GetBufferPointer(), m_vertexShaderData->GetBufferSize(), &pLayout);
 	m_context->IASetInputLayout(pLayout);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	m_context->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
 	// select which primtive type we are using
-	m_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	m_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// draw the vertex buffer to the back buffer
-	m_context->Draw(4, 0);
-	PresentFrame();
+	m_context->Draw(vertexCount, 0);
+
+	m_swapChain->Present(0, 0);
 	pVBuffer->Release();
 	pLayout->Release();
 }
 
-void Rhombus::PresentFrame()
+void SceneBoard::AddShape(AbstractShape* shape)
 {
-	// switch the back buffer and the front buffer
-	m_swapChain->Present(0, 0);
+	m_shapes.push_back(shape);
 }
 
-void Rhombus::ClearRenderTarget()
-{
-	// clear the back buffer to a deep blue
-	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
-	m_context->ClearRenderTargetView(m_renderTargetView, color);
-}
 
-void Rhombus::SetCenter(Point newPos)
-{
-	this->m_pos = newPos;
-	UpdateVertices();
-}
-
-void Rhombus::SetHeight(float height)
-{
-	m_height = height;
-	UpdateVertices();
-}
-
-void Rhombus::SetWidth(float width)
-{
-	m_width = width;
-	UpdateVertices();
-}
-
-void Rhombus::UpdateVertices()
-{
-	delete[] m_vertexArray;
-	m_vertexArray = new Vertex[4];
-
-	//setup the colors
-	m_vertexArray[0].a = 1.0f;
-	m_vertexArray[0].r = 0.0f;
-	m_vertexArray[0].g = 0.5f;
-	m_vertexArray[0].b = 0.0f;
-	
-	m_vertexArray[1].a = 1.0f;
-	m_vertexArray[1].r = 1.0f;
-	m_vertexArray[1].g = 1.0f;
-	m_vertexArray[1].b = 0.5f;
-	
-	m_vertexArray[2].a = 1.0f;
-	m_vertexArray[2].r = 0.5f;
-	m_vertexArray[2].g = 1.0f;
-	m_vertexArray[2].b = 1.0f;
-
-	m_vertexArray[3].a = 1.0f;
-	m_vertexArray[3].r = 0.5f;
-	m_vertexArray[3].g = 1.0f;
-	m_vertexArray[3].b = 1.0f;
-	
-	//end colors
-	
-	float x = 0;
-	float y = 0;
-		
-	x = m_pos.x - m_width / 2;
-	y = m_pos.y;
-	m_vertexArray[0].x = x;
-	m_vertexArray[0].y = y;
-	m_vertexArray[0].z = 0.0f;
-
-	x = m_pos.x;
-	y = m_pos.y + m_height / 2;
-	m_vertexArray[1].x = x;
-	m_vertexArray[1].y = y;
-	m_vertexArray[1].z = 0.0f;
-
-	x = m_pos.x;
-	y = m_pos.y - m_height / 2;
-	m_vertexArray[2].x = x;
-	m_vertexArray[2].y = y;
-	m_vertexArray[2].z = 0.0f;
-
-	x = m_pos.x + m_width / 2;
-	y = m_pos.y;
-	m_vertexArray[3].x = x;
-	m_vertexArray[3].y = y;
-	m_vertexArray[3].z = 0.0f;
-
-}
-
-void Rhombus::InitD3d()
+void SceneBoard::InitD3d()
 {
 	CreateBase3dObjects();
 
@@ -195,10 +120,10 @@ void Rhombus::InitD3d()
 
 	SetViewport();
 
-	InitShaders();	
+	InitShaders();
 }
 
-void Rhombus::SetViewport()
+void SceneBoard::SetViewport()
 {
 	// Set the viewport
 	D3D11_VIEWPORT viewport;
@@ -212,7 +137,7 @@ void Rhombus::SetViewport()
 	m_context->RSSetViewports(1, &viewport);
 }
 
-void Rhombus::SetRenderTarget()
+void SceneBoard::SetRenderTarget()
 {
 	// get the address of the back buffer
 	ID3D11Texture2D* backBuffer;
@@ -229,7 +154,7 @@ void Rhombus::SetRenderTarget()
 	m_context->OMSetRenderTargets(1, &m_renderTargetView, NULL);
 }
 
-void Rhombus::CreateBase3dObjects()
+void SceneBoard::CreateBase3dObjects()
 {
 	// create a struct to hold information about the swap chain
 	DXGI_SWAP_CHAIN_DESC swapChainDescription;
@@ -266,7 +191,7 @@ void Rhombus::CreateBase3dObjects()
 	}
 }
 
-void Rhombus::InitShaders()
+void SceneBoard::InitShaders()
 {
 	// load and compile the two shaders
 	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, &m_vertexShaderData, nullptr);
@@ -274,7 +199,7 @@ void Rhombus::InitShaders()
 	{
 		throw std::exception();
 	}
-	
+
 	ID3DBlob* error = nullptr;
 	result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, &m_pixelShaderData, &error);
 	if (result != S_OK)

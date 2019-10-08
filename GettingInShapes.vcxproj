@@ -157,13 +157,16 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyException.cpp" />
     <ClCompile Include="Rhombus.cpp" />
-    <ClCompile Include="TriangleWobbler.cpp" />
+    <ClCompile Include="RenderTriangle.cpp" />
+    <ClCompile Include="SceneBoard.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowException.cpp" />
     <ClCompile Include="WindowMessage.cpp" />
     <ClCompile Include="WindowToKeyboardPipe.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractShape.h" />
     <ClInclude Include="IWindowMessageReceiver.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="IKeyboardEventReceiver.h" />
@@ -173,9 +176,11 @@
     <ClInclude Include="KeyboardWindowConnector.h" />
     <ClInclude Include="MyException.h" />
     <ClInclude Include="MyWinHeader.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Rhombus.h" />
-    <ClInclude Include="TriangleWobbler.h" />
+    <ClInclude Include="RenderTriangle.h" />
+    <ClInclude Include="SceneBoard.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowException.h" />
