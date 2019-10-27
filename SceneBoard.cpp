@@ -2,7 +2,7 @@
 #include <memory>
 #include <array>
 
-SceneBoard::SceneBoard(HWND windowHandle):m_handle(windowHandle)
+SceneBoard::SceneBoard(HWND windowHandle) :m_handle(windowHandle)
 {
 	InitD3d();
 }
@@ -14,69 +14,78 @@ void SceneBoard::Tick()
 		animation->Tick();
 	}
 }
-
+int lastVertexCount = 0;
+Vertex* m_vertexBuffer = nullptr;
 void SceneBoard::Render()
-{	
+{
 	ClearRenderTarget();
 	int triangleCount = 0;
 	for (auto& shape : m_shapes)
 	{
-		triangleCount += static_cast<int>(shape->GetTriangles().size());
+		triangleCount += static_cast<int>(shape->GetTriangleCount());
 	}
+
+
 	int vertexCount = triangleCount * 3;
 	int vertexBufferByteCount = vertexCount * sizeof(Vertex);
 
-	auto vertexArray = std::make_unique<Vertex[]>(vertexCount);
-
+	if (lastVertexCount != vertexCount)
+	{
+		delete[] m_vertexBuffer;
+		lastVertexCount = vertexCount;
+		m_vertexBuffer = new Vertex[vertexCount];
+	}
+	
 	int vertexWritePointer = 0;
 
 	for (auto shape : m_shapes)
 	{
 		auto shapeColor = shape->GetColor();
 		auto triangles = shape->GetTriangles();
-		for (auto triangle : triangles)
+		auto triangleCount = shape->GetTriangleCount();
+		for (int i = 0; i < triangleCount; i++)
 		{
 			//POINT A
-			vertexArray[vertexWritePointer].a = shapeColor.A;
-			vertexArray[vertexWritePointer].r = shapeColor.R;
-			vertexArray[vertexWritePointer].g = shapeColor.G;
-			vertexArray[vertexWritePointer].b = shapeColor.B;
+			m_vertexBuffer[vertexWritePointer].a = shapeColor.A;
+			m_vertexBuffer[vertexWritePointer].r = shapeColor.R;
+			m_vertexBuffer[vertexWritePointer].g = shapeColor.G;
+			m_vertexBuffer[vertexWritePointer].b = shapeColor.B;
 
-			vertexArray[vertexWritePointer].x = triangle.pointA.x;
-			vertexArray[vertexWritePointer].y = triangle.pointA.y;
-			vertexArray[vertexWritePointer].z = 1.0f;
+			m_vertexBuffer[vertexWritePointer].x = triangles[i].pointA.x;
+			m_vertexBuffer[vertexWritePointer].y = triangles[i].pointA.y;
+			m_vertexBuffer[vertexWritePointer].z = 1.0f;
 
 			//POINT B
-			vertexArray[vertexWritePointer + 1].a = shapeColor.A;
-			vertexArray[vertexWritePointer + 1].r = shapeColor.R;
-			vertexArray[vertexWritePointer + 1].g = shapeColor.G;
-			vertexArray[vertexWritePointer + 1].b = shapeColor.B;
+			m_vertexBuffer[vertexWritePointer + 1].a = shapeColor.A;
+			m_vertexBuffer[vertexWritePointer + 1].r = shapeColor.R;
+			m_vertexBuffer[vertexWritePointer + 1].g = shapeColor.G;
+			m_vertexBuffer[vertexWritePointer + 1].b = shapeColor.B;
 
-			vertexArray[vertexWritePointer + 1].x = triangle.pointB.x;
-			vertexArray[vertexWritePointer + 1].y = triangle.pointB.y;
-			vertexArray[vertexWritePointer + 1].z = 1.0f;
+			m_vertexBuffer[vertexWritePointer + 1].x = triangles[i].pointB.x;
+			m_vertexBuffer[vertexWritePointer + 1].y = triangles[i].pointB.y;
+			m_vertexBuffer[vertexWritePointer + 1].z = 1.0f;
 
 			//POINT C
-			vertexArray[vertexWritePointer + 2].a = shapeColor.A;
-			vertexArray[vertexWritePointer + 2].r = shapeColor.R;
-			vertexArray[vertexWritePointer + 2].g = shapeColor.G;
-			vertexArray[vertexWritePointer + 2].b = shapeColor.B;
+			m_vertexBuffer[vertexWritePointer + 2].a = shapeColor.A;
+			m_vertexBuffer[vertexWritePointer + 2].r = shapeColor.R;
+			m_vertexBuffer[vertexWritePointer + 2].g = shapeColor.G;
+			m_vertexBuffer[vertexWritePointer + 2].b = shapeColor.B;
 
-			vertexArray[vertexWritePointer + 2].x = triangle.pointC.x;
-			vertexArray[vertexWritePointer + 2].y = triangle.pointC.y;
-			vertexArray[vertexWritePointer + 2].z = 1.0f;
-			
+			m_vertexBuffer[vertexWritePointer + 2].x = triangles[i].pointC.x;
+			m_vertexBuffer[vertexWritePointer + 2].y = triangles[i].pointC.y;
+			m_vertexBuffer[vertexWritePointer + 2].z = 1.0f;
+
 			vertexWritePointer += 3;
 		}
-		
+
 	}
 
-	
+
 	ID3D11Buffer* pVBuffer;    // global
 
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-	bd.ByteWidth = vertexBufferByteCount;             
+	bd.ByteWidth = vertexBufferByteCount;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
@@ -84,7 +93,7 @@ void SceneBoard::Render()
 
 	D3D11_MAPPED_SUBRESOURCE ms;
 	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-	auto vertexPtr = vertexArray.get();
+	auto vertexPtr = m_vertexBuffer;
 	memcpy(ms.pData, vertexPtr, vertexBufferByteCount);
 	m_context->Unmap(pVBuffer, NULL);
 

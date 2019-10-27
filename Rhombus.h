@@ -18,5 +18,8 @@ public:
 	void SetColor(Color) override;
 private:
 	void CalculateTriangles();
+
+	// Inherited via AbstractShape
+	virtual int GetTriangleCount() override;
 };
 

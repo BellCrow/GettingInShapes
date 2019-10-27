@@ -10,13 +10,21 @@
 #include "AlternatingWobbleAnimation.h"
 #include "SinusWave.h"
 #include "TimeHelper.h"
+#include "KeyboardMovementAnimation.h"
+#include "KeyboardWindowConnector.h"
 
-
+#include <random>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <thread>
 
+
+float Rand(bool negative = true)
+{
+	auto value = (float)std::rand() / (float)RAND_MAX;
+	return value * (negative && std::rand() % 2 == 0 ? 1 : -1);
+}
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -26,17 +34,32 @@ int CALLBACK WinMain(
 {
 	try
 	{
-		Window wnd(800, 300, "My first custom window");
-		
+		Window wnd(1024, 768, "My first custom window");
+		Keyboard keyBoard = Keyboard();
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
+
+		auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(1.0f, Rand(), Rand(), Rand()));
+		sb.AddShape(shape);
+		
+		auto animation = new KeyboardMovementAnimation(shape);
+		std::shared_ptr<IKeyboardEventReceiver> keyBoardEventReceiver; 
+		keyBoardEventReceiver.reset(animation);
 				
-		auto rhombus = new Rhombus(Point(0.0f, 0.5f), .3f, 2.0f, Color(1.0, 0.2f, .7f, .9f));
-		sb.AddShape(rhombus);
+		auto keyWindowConnector = std::make_shared<WindowToKeyboardPipe>(keyBoard);
+		
+		wnd.Subscribe(keyWindowConnector);
 
-		auto animation = new AlternatingWobbleAnimation(rhombus, 5000, 0.1, 1.0f, 0.1, 1.0f);
+		keyBoard.Subscribe(keyBoardEventReceiver);
+
 		sb.AddAnimation(animation);
+		/*for (size_t i = 0; i < 40000; i++)
+		{
+			auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(Rand(), Rand(), Rand(), Rand()));
+			sb.AddShape(shape);
 
-
+			auto animation = new AlternatingWobbleAnimation(shape, 5000, Rand(false), Rand(false), Rand(false), Rand(false));
+			sb.AddAnimation(animation);
+		}*/
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
@@ -62,14 +85,14 @@ int CALLBACK WinMain(
 			return static_cast<int>(msg.wParam);
 		}
 	}
-	catch (const WindowException& e)
+	catch (const WindowException & e)
 	{
 		MessageBox(nullptr, e.what(), "Window exception", MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
-	
+
 	return EXIT_SUCCESS;
 }

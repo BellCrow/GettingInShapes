@@ -35,23 +35,20 @@ void AlternatingWobbleAnimation::Tick()
 		m_animationSine = new SinusWave(m_periodTime, minValue, maxValue);
 		m_lastTick = TimeHelper::GetTimeInMs();
 	}
-	auto msSinceLastTick = TimeHelper::GetTimeInMs() - m_lastTick;
+	auto time = TimeHelper::GetTimeInMs();
+	auto msSinceLastTick =  time - m_lastTick;
 	m_animationSine->Tick(msSinceLastTick);
-	m_lastTick = TimeHelper::GetTimeInMs();
-	std::stringstream os;
+	m_lastTick = time;
 	if (m_animationState == AnimationState::ChangingWidth)
 	{
 		auto value = m_animationSine->GetValue();
-		os << "Set Height to " << value << std::endl;
 		m_shape->SetHeight(value);
 	}
 	else
 	{
 		auto value = m_animationSine->GetValue();
-		os << "Set Width to " << value << std::endl;
 		m_shape->SetWidth(value);
 	}
-	OutputDebugString(os.str().c_str());
 }
 
 

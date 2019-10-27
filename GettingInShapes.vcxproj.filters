@@ -90,6 +90,9 @@
     <ClCompile Include="TimeHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KeyboardMovementAnimation.cpp">
+      <Filter>Rendering\Animations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="TimeHelper.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardMovementAnimation.h">
+      <Filter>Rendering\Animations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
