@@ -1,58 +1,25 @@
 #pragma once
-#include "MyWinHeader.h"
 
-#include <d3d11.h>
-#include <d3d10.h>
-#include <d3dcompiler.h>
-#include "Position.h"
 #include "Vertex.h"
+#include "Point.h"
+#include "AbstractShape.h"
 
 
-#pragma comment (lib,"d3d11.lib")
-#pragma comment (lib,"d3d10.lib")
-#pragma comment (lib,"D3DCompiler.lib")
-
-
-class Rhombus
+class Rhombus: public AbstractShape
 {
 public:
-	Rhombus(HWND handle, Position pos, float height, float width);
-	~Rhombus();
-	void RenderTriangleFrame();
-	void PresentFrame();
-	void ClearRenderTarget();
+	Rhombus(Point pos, float width, float height, Color color);
+	~Rhombus() = default;
 
-	void SetCenter(Position newPos);
-	void SetHeight(float height);
-	void SetWidth(float width);
+	// Inherited via AbstractShape
+	void SetHeight(float) override;
+	void SetWidth(float) override;
+	void SetPosition(Point) override;
+	void SetColor(Color) override;
 private:
-	IDXGISwapChain* m_swapChain;
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_context;
+	void CalculateTriangles();
 
-	ID3D11RenderTargetView* m_renderTargetView;
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-
-
-	ID3D10Blob* m_vertexShaderData;
-	ID3D10Blob* m_pixelShaderData;
-
-
-	HWND m_handle;
-
-	void InitD3d();
-	void SetViewport();
-	void SetRenderTarget();
-	void CreateBase3dObjects();
-	void InitShaders();
-
-
-	void UpdateVertices();
-
-	Vertex* m_vertexArray;
-	Position m_pos;
-	float m_height;
-	float m_width;
+	// Inherited via AbstractShape
+	virtual int GetTriangleCount() override;
 };
 

@@ -1,18 +1,30 @@
 #include "MyWinHeader.h"
 #include "Rhombus.h"
-#include "TriangleWobbler.h"
 #include "Window.h"
 #include "Keyboard.h"
 #include "KeyboardWindowConnector.h"
 #include "WindowToKeyboardPipe.h"
+#include "SceneBoard.h"
+#include "Triangle.h"
+#include "Rhombus.h"
+#include "AlternatingWobbleAnimation.h"
+#include "SinusWave.h"
+#include "TimeHelper.h"
+#include "KeyboardMovementAnimation.h"
+#include "KeyboardWindowConnector.h"
 
-
-
-#include <string>
+#include <random>
 #include <sstream>
+#include <string>
 #include <iostream>
 #include <thread>
 
+
+float Rand(bool negative = true)
+{
+	auto value = (float)std::rand() / (float)RAND_MAX;
+	return value * (negative && std::rand() % 2 == 0 ? 1 : -1);
+}
 
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
@@ -22,25 +34,42 @@ int CALLBACK WinMain(
 {
 	try
 	{
-		Window wnd(800, 300, "My first custom window");
-		Keyboard keyboard;
-		auto connector = std::make_shared<KeyboardWindowConnector>(wnd);
-		keyboard.Subscribe(connector);
+		Window wnd(1024, 768, "My first custom window");
+		Keyboard keyBoard = Keyboard();
+		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 
-		auto connector2 = std::make_shared<WindowToKeyboardPipe>(keyboard);
-		wnd.Subscribe(connector2);
+		auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(1.0f, Rand(), Rand(), Rand()));
+		sb.AddShape(shape);
 		
-		Rhombus t = Rhombus(wnd.GetWindowHandle(),Position(0,0.5f),1.0f,1.0f);
-		TriangleWobbler wobble = TriangleWobbler(t,1.0f,1.0f);
+		auto animation = new KeyboardMovementAnimation(shape);
+		std::shared_ptr<IKeyboardEventReceiver> keyBoardEventReceiver; 
+		keyBoardEventReceiver.reset(animation);
+				
+		auto keyWindowConnector = std::make_shared<WindowToKeyboardPipe>(keyBoard);
+		
+		wnd.Subscribe(keyWindowConnector);
+
+		keyBoard.Subscribe(keyBoardEventReceiver);
+
+		sb.AddAnimation(animation);
+		/*for (size_t i = 0; i < 40000; i++)
+		{
+			auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(Rand(), Rand(), Rand(), Rand()));
+			sb.AddShape(shape);
+
+			auto animation = new AlternatingWobbleAnimation(shape, 5000, Rand(false), Rand(false), Rand(false), Rand(false));
+			sb.AddAnimation(animation);
+		}*/
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
 		bool continueRender = true;
-		std::thread renderThread = std::thread([&wobble, &continueRender]()
+		std::thread renderThread = std::thread([&continueRender, &sb]()
 			{
 				while (continueRender)
 				{
-					wobble.Tick();
+					sb.Tick();
+					sb.Render();
 				}
 			});
 
@@ -48,23 +77,22 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			
 		}
 		if (msg.message == WM_QUIT)
 		{
 			continueRender = false;
 			renderThread.join();
-			return msg.wParam;
+			return static_cast<int>(msg.wParam);
 		}
 	}
-	catch (const WindowException& e)
+	catch (const WindowException & e)
 	{
 		MessageBox(nullptr, e.what(), "Window exception", MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
-	
+
 	return EXIT_SUCCESS;
 }

@@ -150,37 +150,54 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlternatingWobbleAnimation.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyboardException.cpp" />
     <ClCompile Include="KeyboardMessage.cpp" />
+    <ClCompile Include="KeyboardMovementAnimation.cpp" />
     <ClCompile Include="KeyboardWindowConnector.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyException.cpp" />
     <ClCompile Include="Rhombus.cpp" />
-    <ClCompile Include="TriangleWobbler.cpp" />
+    <ClCompile Include="RenderTriangle.cpp" />
+    <ClCompile Include="SceneBoard.cpp" />
+    <ClCompile Include="SinusWave.cpp" />
+    <ClCompile Include="TimeHelper.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowException.cpp" />
     <ClCompile Include="WindowMessage.cpp" />
     <ClCompile Include="WindowToKeyboardPipe.cpp" />
+    <ClCompile Include="WobbleAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractAnimation.h" />
+    <ClInclude Include="AbstractShape.h" />
+    <ClInclude Include="AlternatingWobbleAnimation.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="IWindowMessageReceiver.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="IKeyboardEventReceiver.h" />
     <ClInclude Include="KeyboardEventType.h" />
     <ClInclude Include="KeyboardException.h" />
     <ClInclude Include="KeyboardMessage.h" />
+    <ClInclude Include="KeyboardMovementAnimation.h" />
     <ClInclude Include="KeyboardWindowConnector.h" />
     <ClInclude Include="MyException.h" />
     <ClInclude Include="MyWinHeader.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Rhombus.h" />
-    <ClInclude Include="TriangleWobbler.h" />
+    <ClInclude Include="RenderTriangle.h" />
+    <ClInclude Include="SceneBoard.h" />
+    <ClInclude Include="SinusWave.h" />
+    <ClInclude Include="TimeHelper.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowException.h" />
     <ClInclude Include="WindowMessage.h" />
     <ClInclude Include="WindowToKeyboardPipe.h" />
+    <ClInclude Include="WobbleAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders.hlsl">
