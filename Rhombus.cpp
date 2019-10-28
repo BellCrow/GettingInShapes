@@ -29,7 +29,6 @@ void Rhombus::SetPosition(Point a_position)
 
 void Rhombus::CalculateTriangles()
 {
-	//delete[] m_triangles;
 	float w2 = m_width / 2 ;
 	float h2 = m_height / 2;
 
