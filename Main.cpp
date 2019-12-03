@@ -2,7 +2,6 @@
 #include "Rhombus.h"
 #include "Window.h"
 #include "Keyboard.h"
-#include "KeyboardWindowConnector.h"
 #include "WindowToKeyboardPipe.h"
 #include "SceneBoard.h"
 #include "Triangle.h"
@@ -11,7 +10,6 @@
 #include "SinusWave.h"
 #include "TimeHelper.h"
 #include "KeyboardMovementAnimation.h"
-#include "KeyboardWindowConnector.h"
 
 #include <random>
 #include <sstream>
@@ -41,15 +39,8 @@ int CALLBACK WinMain(
 
 		auto shape = new Rhombus(Point(0,0), 1,1, Color(1.0f, Rand(), Rand(), Rand()));
 		sb.AddShape(shape);
-							
-		/*for (size_t i = 0; i < 40000; i++)
-		{
-			auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(Rand(), Rand(), Rand(), Rand()));
-			sb.AddShape(shape);
+		
 
-			auto animation = new AlternatingWobbleAnimation(shape, 5000, Rand(false), Rand(false), Rand(false), Rand(false));
-			sb.AddAnimation(animation);
-		}*/
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
