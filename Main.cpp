@@ -36,22 +36,12 @@ int CALLBACK WinMain(
 	{
 		Window wnd(1024, 768, "My first custom window");
 		Keyboard keyBoard = Keyboard();
+		Camera camera = Camera();
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 
-		auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(1.0f, Rand(), Rand(), Rand()));
+		auto shape = new Rhombus(Point(0,0), 1,1, Color(1.0f, Rand(), Rand(), Rand()));
 		sb.AddShape(shape);
-		
-		auto animation = new KeyboardMovementAnimation(shape);
-		std::shared_ptr<IKeyboardEventReceiver> keyBoardEventReceiver; 
-		keyBoardEventReceiver.reset(animation);
-				
-		auto keyWindowConnector = std::make_shared<WindowToKeyboardPipe>(keyBoard);
-		
-		wnd.Subscribe(keyWindowConnector);
-
-		keyBoard.Subscribe(keyBoardEventReceiver);
-
-		sb.AddAnimation(animation);
+							
 		/*for (size_t i = 0; i < 40000; i++)
 		{
 			auto shape = new Rhombus(Point(Rand(), Rand()), Rand(), Rand(), Color(Rand(), Rand(), Rand(), Rand()));
@@ -64,12 +54,12 @@ int CALLBACK WinMain(
 
 		BOOL result = { 0 };
 		bool continueRender = true;
-		std::thread renderThread = std::thread([&continueRender, &sb]()
+		std::thread renderThread = std::thread([&continueRender, &sb, &camera]()
 			{
 				while (continueRender)
 				{
 					sb.Tick();
-					sb.Render();
+					sb.Render(&camera);
 				}
 			});
 

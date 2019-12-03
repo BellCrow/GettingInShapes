@@ -93,6 +93,9 @@
     <ClCompile Include="KeyboardMovementAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="KeyboardMovementAnimation.h">
       <Filter>Rendering\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

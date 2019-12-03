@@ -1,11 +1,14 @@
 #pragma once
-#include "RenderTriangle.h"
-#include "Color.h"
-
 #include <vector>
 #include <string>
 #include <memory>
 #include <array>
+#include <DirectXMath.h>
+
+#include "RenderTriangle.h"
+#include "Color.h"
+
+using namespace DirectX;
 
 class AbstractShape
 {
@@ -17,6 +20,7 @@ public:
 		m_height = height;
 		m_color = color;
 		m_triangles = nullptr;
+		m_isDirty = true;
 	}
 
 	virtual void SetHeight(float) = 0;
@@ -24,20 +28,40 @@ public:
 	virtual void SetPosition(Point) = 0;
 	virtual void SetColor(Color) = 0;
 	virtual int GetTriangleCount() = 0;
+	
 
-	const RenderTriangle* GetTriangles() const { return m_triangles; }
 	const float& GetHeight() const { return m_height; }
 	const float& GetWidth() const { return m_width; }
 	const Point& GetPosition() const { return m_position; }
 	const Color& GetColor() const { return m_color; }
-	const std::string& GetName() const { return m_name; }
+	
+
+	const RenderTriangle* GetTriangles() {
+		if (m_isDirty)
+		{
+			CalculateRenderData();
+			m_isDirty = false;
+		}
+		return m_triangles;
+	}
+	const XMMATRIX* GetModelmatrix() {
+		if (m_isDirty)
+		{
+			CalculateRenderData();
+			m_isDirty = false;
+		}
+		return &m_modelMatrix;
+	}
 
 protected:
+	virtual void CalculateRenderData() = 0;
+	bool m_isDirty;
 	Color m_color;
 	float m_height;
 	float m_width;
 	Point m_position;
 	std::string m_name;
 	RenderTriangle* m_triangles;
+	XMMATRIX m_modelMatrix;
 };
 

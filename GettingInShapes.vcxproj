@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AlternatingWobbleAnimation.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyboardException.cpp" />
     <ClCompile Include="KeyboardMessage.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="AbstractAnimation.h" />
     <ClInclude Include="AbstractShape.h" />
     <ClInclude Include="AlternatingWobbleAnimation.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="IWindowMessageReceiver.h" />
     <ClInclude Include="Keyboard.h" />

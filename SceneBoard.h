@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "Vertex.h"
 #include "AbstractShape.h"
+#include "Camera.h"
 
 #include <d3d11.h>
 #include <d3d10.h>
@@ -33,21 +34,24 @@ class SceneBoard
 	
 	HWND m_handle;
 
+	Point m_pos;
+	float m_height;
+	float m_width;
+
+private:
 	void InitD3d();
 	void SetViewport();
 	void SetRenderTarget();
 	void CreateBase3dObjects();
 	void InitShaders();
 	void ClearRenderTarget();
-
-	Point m_pos;
-	float m_height;
-	float m_width;
-
+	void SetViewProjectionMatrix(Camera* camera);
+	void SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix);	
+	void RenderShape(AbstractShape* shape);
 public:
 	SceneBoard(HWND windowHandle);
 	void Tick();
-	void Render();
+	void Render(Camera* camera);
 	void AddShape(AbstractShape* shape);
 	void AddAnimation(AbstractAnimation* animation);
 
