@@ -37,7 +37,7 @@ int CALLBACK WinMain(
 		Camera camera = Camera();
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 
-		auto shape = new Rhombus(Point(0,0), 1,1, Color(1.0f, Rand(), Rand(), Rand()));
+		auto shape = new Rhombus(Point(0,0),200,300, Color(1.0f, Rand(), Rand(), Rand()));
 		sb.AddShape(shape);
 		
 

@@ -22,13 +22,13 @@ Point Camera::GetCenterPosition() const
 
 const DirectX::XMMATRIX const Camera::GetViewProjectionMatrix()
 {
-	auto eyePos = DirectX::XMVectorSet(0, 0, -1, 1);
+	auto eyePos = DirectX::XMVectorSet(0, 0, -10, 1);
 	auto lookAtPoint = DirectX::XMVectorSet(0, 0, 0, 1);
 	auto upVector = DirectX::XMVectorSet(0, 1, 0, 1);
 
 	auto viewMatrix = DirectX::XMMatrixLookAtLH(eyePos, lookAtPoint, upVector);
 
-	auto projectionMatrix = DirectX::XMMatrixIdentity(); //DirectX::XMMatrixOrthographicLH(800, 600, 0, 10000);
+	auto projectionMatrix = DirectX::XMMatrixOrthographicLH(800, 600, -1, 10000);
 
 	return  viewMatrix * projectionMatrix;
 }

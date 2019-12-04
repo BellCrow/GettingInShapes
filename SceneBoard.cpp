@@ -18,18 +18,7 @@ void SceneBoard::Tick()
 void SceneBoard::SetViewProjectionMatrix(Camera* camera)
 {
 	auto viewProjMatrix = camera->GetViewProjectionMatrix();
-	
-	/*
-	ID3D11Buffer* pVBuffer;
-
-		D3D11_BUFFER_DESC bd = {};
-		bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-		bd.ByteWidth = vertexBufferByteCount;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
-
-		m_device->CreateBuffer(&bd, NULL, &pVBuffer);
-	*/
+		
 	SetVertexCBuffer(0, viewProjMatrix);
 }
 
