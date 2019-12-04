@@ -14,74 +14,83 @@ void SceneBoard::Tick()
 		animation->Tick();
 	}
 }
-int lastVertexCount = 0;
-Vertex* m_vertexBuffer = nullptr;
-void SceneBoard::Render()
+
+void SceneBoard::SetViewProjectionMatrix(Camera* camera)
 {
-	ClearRenderTarget();
-	int triangleCount = 0;
-	for (auto& shape : m_shapes)
+	auto viewProjMatrix = camera->GetViewProjectionMatrix();
+		
+	SetVertexCBuffer(0, viewProjMatrix);
+}
+
+void SceneBoard::SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix)
+{
+	ID3D11Buffer* matrixBuffer = nullptr;
+	D3D11_BUFFER_DESC bd = {};
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(XMMATRIX);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	m_device->CreateBuffer(&bd, nullptr, &matrixBuffer);
+
+	D3D11_MAPPED_SUBRESOURCE res = {};
+	m_context->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
+	memcpy(res.pData, &matrix, sizeof(XMMATRIX));
+	m_context->Unmap(matrixBuffer, 0);
+
+	ID3D11Buffer* const cBuffer = const_cast<ID3D11Buffer* const>(matrixBuffer);
+	m_context->VSSetConstantBuffers(slot, 1, &cBuffer);
+	cBuffer->Release();
+}
+
+void SceneBoard::RenderShape(AbstractShape* shape)
+{
+	//set model matrix here
+	auto modelMatrix = shape->GetModelmatrix();
+
+	SetVertexCBuffer(1, *modelMatrix);
+
+	auto shapeColor = shape->GetColor();
+	auto triangles = shape->GetTriangles();
+	auto triangleCount = shape->GetTriangleCount();
+	UINT vertexCount = triangleCount * 3;
+	UINT vertexBufferByteCount = vertexCount * sizeof(Vertex);
+	auto m_vertexBuffer = new Vertex[vertexCount];
+
+	for (int i = 0; i < triangleCount; i++)
 	{
-		triangleCount += static_cast<int>(shape->GetTriangleCount());
+		//POINT A
+		m_vertexBuffer[i * 3].a = shapeColor.A;
+		m_vertexBuffer[i * 3].r = shapeColor.R;
+		m_vertexBuffer[i * 3].g = shapeColor.G;
+		m_vertexBuffer[i * 3].b = shapeColor.B;
+
+		m_vertexBuffer[i * 3].x = triangles[i].pointA.x;
+		m_vertexBuffer[i * 3].y = triangles[i].pointA.y;
+		m_vertexBuffer[i * 3].z = 1.0f;
+
+		//POINT B
+		m_vertexBuffer[i * 3 + 1].a = shapeColor.A;
+		m_vertexBuffer[i * 3 + 1].r = shapeColor.R;
+		m_vertexBuffer[i * 3 + 1].g = shapeColor.G;
+		m_vertexBuffer[i * 3 + 1].b = shapeColor.B;
+
+		m_vertexBuffer[i * 3 + 1].x = triangles[i].pointB.x;
+		m_vertexBuffer[i * 3 + 1].y = triangles[i].pointB.y;
+		m_vertexBuffer[i * 3 + 1].z = 1.0f;
+
+		//POINT C
+		m_vertexBuffer[i * 3 + 2].a = shapeColor.A;
+		m_vertexBuffer[i * 3 + 2].r = shapeColor.R;
+		m_vertexBuffer[i * 3 + 2].g = shapeColor.G;
+		m_vertexBuffer[i * 3 + 2].b = shapeColor.B;
+
+		m_vertexBuffer[i * 3 + 2].x = triangles[i].pointC.x;
+		m_vertexBuffer[i * 3 + 2].y = triangles[i].pointC.y;
+		m_vertexBuffer[i * 3 + 2].z = 1.0f;
 	}
 
-
-	int vertexCount = triangleCount * 3;
-	int vertexBufferByteCount = vertexCount * sizeof(Vertex);
-
-	if (lastVertexCount != vertexCount)
-	{
-		delete[] m_vertexBuffer;
-		lastVertexCount = vertexCount;
-		m_vertexBuffer = new Vertex[vertexCount];
-	}
-	
-	int vertexWritePointer = 0;
-
-	for (auto shape : m_shapes)
-	{
-		auto shapeColor = shape->GetColor();
-		auto triangles = shape->GetTriangles();
-		auto triangleCount = shape->GetTriangleCount();
-		for (int i = 0; i < triangleCount; i++)
-		{
-			//POINT A
-			m_vertexBuffer[vertexWritePointer].a = shapeColor.A;
-			m_vertexBuffer[vertexWritePointer].r = shapeColor.R;
-			m_vertexBuffer[vertexWritePointer].g = shapeColor.G;
-			m_vertexBuffer[vertexWritePointer].b = shapeColor.B;
-
-			m_vertexBuffer[vertexWritePointer].x = triangles[i].pointA.x;
-			m_vertexBuffer[vertexWritePointer].y = triangles[i].pointA.y;
-			m_vertexBuffer[vertexWritePointer].z = 1.0f;
-
-			//POINT B
-			m_vertexBuffer[vertexWritePointer + 1].a = shapeColor.A;
-			m_vertexBuffer[vertexWritePointer + 1].r = shapeColor.R;
-			m_vertexBuffer[vertexWritePointer + 1].g = shapeColor.G;
-			m_vertexBuffer[vertexWritePointer + 1].b = shapeColor.B;
-
-			m_vertexBuffer[vertexWritePointer + 1].x = triangles[i].pointB.x;
-			m_vertexBuffer[vertexWritePointer + 1].y = triangles[i].pointB.y;
-			m_vertexBuffer[vertexWritePointer + 1].z = 1.0f;
-
-			//POINT C
-			m_vertexBuffer[vertexWritePointer + 2].a = shapeColor.A;
-			m_vertexBuffer[vertexWritePointer + 2].r = shapeColor.R;
-			m_vertexBuffer[vertexWritePointer + 2].g = shapeColor.G;
-			m_vertexBuffer[vertexWritePointer + 2].b = shapeColor.B;
-
-			m_vertexBuffer[vertexWritePointer + 2].x = triangles[i].pointC.x;
-			m_vertexBuffer[vertexWritePointer + 2].y = triangles[i].pointC.y;
-			m_vertexBuffer[vertexWritePointer + 2].z = 1.0f;
-
-			vertexWritePointer += 3;
-		}
-
-	}
-
-
-	ID3D11Buffer* pVBuffer;    // global
+	ID3D11Buffer* pVBuffer;
 
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
@@ -98,7 +107,6 @@ void SceneBoard::Render()
 	m_context->Unmap(pVBuffer, NULL);
 
 	ID3D11InputLayout* pLayout;    // global
-
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -117,9 +125,25 @@ void SceneBoard::Render()
 	// draw the vertex buffer to the back buffer
 	m_context->Draw(vertexCount, 0);
 
-	m_swapChain->Present(0, 0);
 	pVBuffer->Release();
 	pLayout->Release();
+
+	delete[] m_vertexBuffer;
+}
+
+void SceneBoard::Render(Camera* camera)
+{
+	ClearRenderTarget();
+	//set view/projection matrix here
+
+	SetViewProjectionMatrix(camera);
+
+	for (auto shape : m_shapes)
+	{
+		RenderShape(shape);
+	}
+
+	m_swapChain->Present(0, 0);
 }
 
 void SceneBoard::AddShape(AbstractShape* shape)
@@ -196,7 +220,7 @@ void SceneBoard::CreateBase3dObjects()
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		NULL,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -215,14 +239,21 @@ void SceneBoard::CreateBase3dObjects()
 void SceneBoard::InitShaders()
 {
 	// load and compile the two shaders
-	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, &m_vertexShaderData, nullptr);
+	ID3DBlob* errorBlob = nullptr;
+	auto result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "VShader", "vs_4_0",D3DCOMPILE_DEBUG,0, &m_vertexShaderData, &errorBlob);
 	if (result != S_OK)
 	{
+		if (errorBlob)
+		{
+			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+			errorBlob->Release();
+		}
+
 		throw std::exception();
 	}
 
 	ID3DBlob* error = nullptr;
-	result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, &m_pixelShaderData, &error);
+	result = D3DCompileFromFile(L"Shaders.hlsl", 0, 0, "PShader", "ps_4_0", D3DCOMPILE_DEBUG, 0, &m_pixelShaderData, &error);
 	if (result != S_OK)
 	{
 		auto ptr = error->GetBufferPointer();

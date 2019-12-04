@@ -34,21 +34,23 @@ int CALLBACK WinMain(
 	{
 		Window wnd(1024, 768, "My first custom window");
 		Keyboard keyBoard = Keyboard();
+		Camera camera = Camera();
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 
-		auto triangle = new Triangle(Point(0,0),0.2f,0.2f,Color(1,0,0,0));
-		sb.AddShape(triangle);
+		auto shape = new Rhombus(Point(0,0),200,300, Color(1.0f, Rand(), Rand(), Rand()));
+		sb.AddShape(shape);
 		
+
 		MSG msg = { 0 };
 
 		BOOL result = { 0 };
 		bool continueRender = true;
-		std::thread renderThread = std::thread([&continueRender, &sb]()
+		std::thread renderThread = std::thread([&continueRender, &sb, &camera]()
 			{
 				while (continueRender)
 				{
 					sb.Tick();
-					sb.Render();
+					sb.Render(&camera);
 				}
 			});
 

@@ -9,7 +9,7 @@ class Rhombus: public AbstractShape
 {
 public:
 	Rhombus(Point pos, float width, float height, Color color);
-	~Rhombus() = default;
+	~Rhombus();
 
 	// Inherited via AbstractShape
 	void SetHeight(float) override;
@@ -17,9 +17,11 @@ public:
 	void SetPosition(Point) override;
 	void SetColor(Color) override;
 private:
-	void CalculateTriangles();
-
+	
 	// Inherited via AbstractShape
 	virtual int GetTriangleCount() override;
+
+	// Inherited via AbstractShape
+	virtual void CalculateRenderData() override;
 };
 

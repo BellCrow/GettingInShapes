@@ -34,9 +34,6 @@
     <Filter Include="Rendering\Animations">
       <UniqueIdentifier>{8b5c170d-e7a8-41ea-8d14-0996ddc46501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Util">
-      <UniqueIdentifier>{e0165624-01e2-4297-a8e6-fcf3cd5a1e2e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,6 +60,12 @@
     <ClCompile Include="MyException.cpp">
       <Filter>ErrorHandling</Filter>
     </ClCompile>
+    <ClCompile Include="KeyboardWindowConnector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowToKeyboardPipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Rhombus.cpp">
       <Filter>Rendering\Shapes</Filter>
     </ClCompile>
@@ -81,19 +84,25 @@
     <ClCompile Include="AlternatingWobbleAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
+    <ClCompile Include="SinusWave.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="KeyboardMovementAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
-    <ClCompile Include="SinusWave.cpp">
-      <Filter>Util</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowToKeyboardPipe.cpp">
-      <Filter>Input\Keyboard</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
       <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="MyException.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WindowException.h">
       <Filter>WindowHandling</Filter>
@@ -116,8 +125,17 @@
     <ClInclude Include="IKeyboardEventReceiver.h">
       <Filter>Input\Keyboard</Filter>
     </ClInclude>
+    <ClInclude Include="MyWinHeader.h">
+      <Filter>ErrorHandling</Filter>
+    </ClInclude>
     <ClInclude Include="IWindowMessageReceiver.h">
       <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardWindowConnector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowToKeyboardPipe.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Rendering</Filter>
@@ -152,23 +170,17 @@
     <ClInclude Include="AlternatingWobbleAnimation.h">
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
+    <ClInclude Include="SinusWave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="KeyboardMovementAnimation.h">
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
-    <ClInclude Include="SinusWave.h">
-      <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeHelper.h">
-      <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWinHeader.h">
-      <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowToKeyboardPipe.h">
-      <Filter>Input\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="MyException.h">
-      <Filter>Util</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 #include "AbstractShape.h"
-class Triangle : public AbstractShape
+class Triangle :
+	public AbstractShape
 {
 public:
 	Triangle(Point center, float width, float height, Color color);
@@ -10,12 +11,12 @@ public:
 	virtual void SetWidth(float) override;
 	virtual void SetPosition(Point) override;
 private:
-	void CalculateTriangles();
 
 	// Inherited via AbstractShape
 	virtual void SetColor(Color) override;
 
 	// Inherited via AbstractShape
 	virtual int GetTriangleCount() override;
+	virtual void CalculateRenderData() override;
 };
 

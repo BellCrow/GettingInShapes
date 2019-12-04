@@ -10,15 +10,31 @@ struct PixelInputType
 	float4 color : COLOR;
 };
 
+//uniform float4x4 g_modelMatrix;
+cbuffer g_viewMatrixProj
+{
+    float4x4 viewProjMatrix;
+}
+
+cbuffer g_modelMatrix
+{
+    float4x4 modelMatrix;
+};
+
 PixelInputType VShader(VertexInputType input)
 {
 	PixelInputType output;
 
-	output.position = input.position;
-
+	// Change the position vector to be 4 units for proper matrix calculations.	
+    input.position.w = 1;
+    
+    float4 pos = input.position;
+    pos = mul(pos, modelMatrix);
+    pos = mul(pos, viewProjMatrix);
+	output.position = pos;
+    
 	// Store the input color for the pixel shader to use.
 	output.color = input.color;
-
 	return output;
 }
 
