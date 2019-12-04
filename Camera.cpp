@@ -1,5 +1,10 @@
 #include "Camera.h"
 
+Camera::Camera()
+{
+	m_viewProjection = {};
+}
+
 void Camera::SetCenterPosition(Point position)
 {
 	m_position = position;
@@ -20,7 +25,7 @@ Point Camera::GetCenterPosition() const
 	return m_position;
 }
 
-const DirectX::XMMATRIX const Camera::GetViewProjectionMatrix()
+const DirectX::XMMATRIX Camera::GetViewProjectionMatrix()
 {
 	auto eyePos = DirectX::XMVectorSet(0, 0, -10, 1);
 	auto lookAtPoint = DirectX::XMVectorSet(0, 0, 0, 1);

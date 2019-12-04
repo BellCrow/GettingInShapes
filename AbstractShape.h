@@ -21,6 +21,7 @@ public:
 		m_color = color;
 		m_triangles = nullptr;
 		m_isDirty = true;
+		m_modelMatrix = {};
 	}
 
 	~AbstractShape() {

@@ -31,7 +31,10 @@ void SceneBoard::SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix)
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	m_device->CreateBuffer(&bd, nullptr, &matrixBuffer);
+	if (FAILED(m_device->CreateBuffer(&bd, nullptr, &matrixBuffer)) || matrixBuffer == nullptr)
+	{
+		throw std::exception("Could not create matrix buffer");
+	}
 
 	D3D11_MAPPED_SUBRESOURCE res = {};
 	m_context->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
@@ -98,7 +101,10 @@ void SceneBoard::RenderShape(AbstractShape* shape)
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
-	m_device->CreateBuffer(&bd, NULL, &pVBuffer);
+	if (FAILED(m_device->CreateBuffer(&bd, NULL, &pVBuffer)) || pVBuffer == nullptr)
+	{
+		throw std::exception("Could not create vertex buffer");
+	}
 
 	D3D11_MAPPED_SUBRESOURCE ms;
 	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
