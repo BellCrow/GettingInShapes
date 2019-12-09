@@ -41,16 +41,14 @@ void Rhombus::CalculateRenderData()
 	float w2 = m_width / 2;
 	float h2 = m_height / 2;
 
-	Point a(m_position.x - w2, m_position.y);
-	Point b(m_position.x, m_position.y + h2);
-	Point c(m_position.x + w2, m_position.y);
-	Point d(m_position.x, m_position.y - h2);
+	Point a(- 1, 0);
+	Point b(0, 0.5);
+	Point c(1, 0);
+	Point d(0, - 0.5);
 
 	m_triangles[0] = RenderTriangle(b, d, a);
 	m_triangles[1] = RenderTriangle(b, c, d);
-
-	m_modelMatrix = { };
-	m_modelMatrix = DirectX::XMMatrixTranslation(m_position.x, m_position.y, 0);
+		
 }
 
 void Rhombus::SetColor(Color color)

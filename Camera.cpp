@@ -25,15 +25,21 @@ Point Camera::GetCenterPosition() const
 	return m_position;
 }
 
-const DirectX::XMMATRIX Camera::GetViewProjectionMatrix()
+const DirectX::XMMATRIX Camera::GetViewMatrix()
 {
-	auto eyePos = DirectX::XMVectorSet(0, 0, -10, 1);
-	auto lookAtPoint = DirectX::XMVectorSet(0, 0, 0, 1);
+	auto cameraPos = GetCenterPosition();
+
+	auto eyePos = DirectX::XMVectorSet(cameraPos.x, cameraPos.y, -100, 1);
+	auto lookAtPoint = DirectX::XMVectorSet(cameraPos.x, cameraPos.y, 0, 1);
 	auto upVector = DirectX::XMVectorSet(0, 1, 0, 1);
 
 	auto viewMatrix = DirectX::XMMatrixLookAtLH(eyePos, lookAtPoint, upVector);
+	
+	return viewMatrix;
+}
 
-	auto projectionMatrix = DirectX::XMMatrixOrthographicLH(800, 600, -1, 10000);
-
-	return  viewMatrix * projectionMatrix;
+const DirectX::XMMATRIX Camera::GetProjectionMatrix()
+{
+	auto projectionMatrix = DirectX::XMMatrixOrthographicLH(1024, 768, 0.1, 10000);
+	return projectionMatrix;
 }

@@ -22,9 +22,6 @@
     <Filter Include="Input\Keyboard">
       <UniqueIdentifier>{e2101297-284e-456c-9b2e-2bfa11ee1615}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ErrorHandling">
-      <UniqueIdentifier>{6b047747-1da2-4725-8e35-96f86e742a17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering">
       <UniqueIdentifier>{b62582c3-0e16-424f-98ec-2963da4509ad}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,15 @@
     <Filter Include="Rendering\Animations">
       <UniqueIdentifier>{8b5c170d-e7a8-41ea-8d14-0996ddc46501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{d6c72aa2-175f-4c40-9331-8ac79a3d859e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowHandling\MessageHandling">
+      <UniqueIdentifier>{2cf806f0-5b09-408d-8bb5-062f79529a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Camera">
+      <UniqueIdentifier>{cc3eb34b-179d-49ce-bd7b-74323cefaec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,29 +48,11 @@
     <ClCompile Include="Window.cpp">
       <Filter>WindowHandling</Filter>
     </ClCompile>
-    <ClCompile Include="WindowException.cpp">
-      <Filter>WindowHandling</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowMessage.cpp">
-      <Filter>WindowHandling</Filter>
-    </ClCompile>
     <ClCompile Include="Keyboard.cpp">
-      <Filter>Input\Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardException.cpp">
       <Filter>Input\Keyboard</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardMessage.cpp">
       <Filter>Input\Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="MyException.cpp">
-      <Filter>ErrorHandling</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardWindowConnector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowToKeyboardPipe.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rhombus.cpp">
       <Filter>Rendering\Shapes</Filter>
@@ -84,36 +72,36 @@
     <ClCompile Include="AlternatingWobbleAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
-    <ClCompile Include="SinusWave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KeyboardMovementAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
+    <ClCompile Include="SinusWave.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowToKeyboardPipe.cpp">
+      <Filter>WindowHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowClass.cpp">
+      <Filter>WindowHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageSource.cpp">
+      <Filter>WindowHandling\MessageHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowMessage.cpp">
+      <Filter>WindowHandling\MessageHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraControl.cpp">
+      <Filter>Rendering\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Rendering\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
       <Filter>WindowHandling</Filter>
     </ClInclude>
-    <ClInclude Include="MyException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowException.h">
-      <Filter>WindowHandling</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowMessage.h">
-      <Filter>WindowHandling</Filter>
-    </ClInclude>
     <ClInclude Include="Keyboard.h">
-      <Filter>Input\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardException.h">
       <Filter>Input\Keyboard</Filter>
     </ClInclude>
     <ClInclude Include="KeyboardMessage.h">
@@ -125,17 +113,8 @@
     <ClInclude Include="IKeyboardEventReceiver.h">
       <Filter>Input\Keyboard</Filter>
     </ClInclude>
-    <ClInclude Include="MyWinHeader.h">
-      <Filter>ErrorHandling</Filter>
-    </ClInclude>
     <ClInclude Include="IWindowMessageReceiver.h">
       <Filter>WindowHandling</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardWindowConnector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowToKeyboardPipe.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Rendering</Filter>
@@ -170,17 +149,41 @@
     <ClInclude Include="AlternatingWobbleAnimation.h">
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
-    <ClInclude Include="SinusWave.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="KeyboardMovementAnimation.h">
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
+    <ClInclude Include="TimeHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="SinusWave.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowToKeyboardPipe.h">
+      <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowClass.h">
+      <Filter>WindowHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="MyWinHeader.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorTranslator.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageSource.h">
+      <Filter>WindowHandling\MessageHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowMessage.h">
+      <Filter>WindowHandling\MessageHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="IMessageReceiver.h">
+      <Filter>WindowHandling\MessageHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraControl.h">
+      <Filter>Rendering\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Rendering\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

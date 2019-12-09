@@ -2,7 +2,9 @@
 
 Triangle::Triangle(Point center, float width, float height, Color color)
 	:AbstractShape(center, width, height, color)
-{}
+{
+
+}
 
 void Triangle::SetHeight(float a_height)
 {
@@ -29,18 +31,19 @@ void Triangle::SetColor(Color color)
 
 int Triangle::GetTriangleCount()
 {
-	return 0;
+	return 1;
 }
 
 void Triangle::CalculateRenderData()
 {
-	//m_triangles->clear();
-	float w2 = m_width / 2;
-	float h2 = m_height / 2;
-	Point a = Point(m_position.x - w2, m_position.y - h2);
-	Point b = Point(m_position.x, m_position.y + h2);
-	Point c = Point(m_position.x + w2, m_position.y - h2);
-	//m_triangles->push_back(RenderTriangle(a, b, c));
-
+	if (m_triangles == nullptr)
+	{
+		m_triangles = new RenderTriangle[1];
+	}
+	
+	Point a = Point(- 1, - 0.5);
+	Point b = Point(0, 0.5);
+	Point c = Point(1, - 0.5);
+	m_triangles[0] = RenderTriangle(a, b, c);
 }
 

@@ -1,9 +1,11 @@
 #include "Keyboard.h"
-#include "KeyboardException.h"
+#include <functional>
 
-
-Keyboard::Keyboard()
+Keyboard::Keyboard(MessageSource* messageSource)
 {
+	m_messageSource = messageSource;
+	std::function<void(WindowMessage)> function = std::bind(&Keyboard::Handlemessage, this, std::placeholders::_1);
+	m_messageSource->Subscribe(function);
 	Reset();
 }
 
@@ -21,15 +23,32 @@ void Keyboard::CheckKeyCode(int keyCode) const
 {
 	if (MaxKeys <= keyCode)
 	{
-		throw KeyboardException(__LINE__, __FILE__, keyCode);
+		throw std::exception("Illegal keycode detected");
 	}
 }
 
 void Keyboard::FireEvent(const KeyboardMessage& keyboardEvent)
 {
-	for (auto eventSubscriber : _keyboardEventSubscriber)
+	for (auto eventSubscriber : m_keyboardEventSubscriber)
 	{
 		eventSubscriber->HandleKeyboardEvent(keyboardEvent);
+	}
+	
+	for (auto eventSubscriber : m_keyboardEventLambdas)
+	{
+		eventSubscriber(keyboardEvent);
+	}
+}
+
+void Keyboard::Handlemessage(WindowMessage windowMessage)
+{
+	if (windowMessage.GetMessageType() == WM_KEYDOWN)
+	{
+		KeyDown(((int)windowMessage.GetWParam()));
+	}
+	else if (windowMessage.GetMessageType() == WM_KEYUP)
+	{
+		KeyUp(((int)windowMessage.GetWParam()));
 	}
 }
 
@@ -57,5 +76,10 @@ void Keyboard::Reset() noexcept
 
 void Keyboard::Subscribe(const std::shared_ptr<IKeyboardEventReceiver> eventReceiver)
 {
-	_keyboardEventSubscriber.push_back(eventReceiver);
+	m_keyboardEventSubscriber.push_back(eventReceiver);
+}
+
+void Keyboard::Subscribe(std::function<void(KeyboardMessage)> eventReceiver)
+{
+	m_keyboardEventLambdas.push_back(eventReceiver);
 }

@@ -1,7 +1,5 @@
 #pragma once
-
 #include "MyWinHeader.h"
-#include "WindowException.h"
 #include "WindowMessage.h"
 #include "IWindowMessageReceiver.h"
 #include <memory>
@@ -29,25 +27,6 @@ private:
 	HWND m_windowHandle;
 	std::vector<std::shared_ptr<IWindowMessageReceiver>> _subscribers;
 	void FireEvent(const WindowMessage&);
-	
-	class WindowClass
-	{
-	public:
-		static const char* GetWindowClassName() noexcept;
-		static HINSTANCE GetInstance() noexcept;
-
-	private:
-
-		WindowClass();
-		~WindowClass() noexcept;
-
-		WindowClass(const WindowClass&) = delete;
-		WindowClass& operator=(const WindowClass&) = delete;
-
-		static constexpr const char* wndClassName = "MyWindow";
-		static WindowClass instance;
-		static HINSTANCE hInst;
-	};
 };
 
 

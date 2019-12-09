@@ -13,7 +13,9 @@ public:
 	
 	Point GetCenterPosition() const;
 	
-	const DirectX::XMMATRIX GetViewProjectionMatrix();
+	const DirectX::XMMATRIX GetViewMatrix();
+	const DirectX::XMMATRIX GetProjectionMatrix();
+
 private:
 	Point m_position;
 	DirectX::XMMATRIX m_viewProjection;

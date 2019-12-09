@@ -17,9 +17,11 @@ void SceneBoard::Tick()
 
 void SceneBoard::SetViewProjectionMatrix(Camera* camera)
 {
-	auto viewProjMatrix = camera->GetViewProjectionMatrix();
-		
-	SetVertexCBuffer(0, viewProjMatrix);
+	auto viewMatrix = camera->GetViewMatrix();
+	SetVertexCBuffer(1, viewMatrix);
+	
+	auto projMatrix = camera->GetProjectionMatrix();		
+	SetVertexCBuffer(2, projMatrix);
 }
 
 void SceneBoard::SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix)
@@ -51,7 +53,7 @@ void SceneBoard::RenderShape(AbstractShape* shape)
 	//set model matrix here
 	auto modelMatrix = shape->GetModelmatrix();
 
-	SetVertexCBuffer(1, *modelMatrix);
+	SetVertexCBuffer(0, *modelMatrix);
 
 	auto shapeColor = shape->GetColor();
 	auto triangles = shape->GetTriangles();
@@ -63,34 +65,36 @@ void SceneBoard::RenderShape(AbstractShape* shape)
 	for (int i = 0; i < triangleCount; i++)
 	{
 		//POINT A
-		m_vertexBuffer[i * 3].a = shapeColor.A;
-		m_vertexBuffer[i * 3].r = shapeColor.R;
-		m_vertexBuffer[i * 3].g = shapeColor.G;
-		m_vertexBuffer[i * 3].b = shapeColor.B;
+		m_vertexBuffer[i * 3].position.x = triangles[i].pointA.x;
+		m_vertexBuffer[i * 3].position.y = triangles[i].pointA.y;
+		m_vertexBuffer[i * 3].position.z = 1.0f;
 
-		m_vertexBuffer[i * 3].x = triangles[i].pointA.x;
-		m_vertexBuffer[i * 3].y = triangles[i].pointA.y;
-		m_vertexBuffer[i * 3].z = 1.0f;
+		m_vertexBuffer[i * 3].color.x = shapeColor.R;
+		m_vertexBuffer[i * 3].color.y = shapeColor.G;
+		m_vertexBuffer[i * 3].color.z = shapeColor.B;
+		m_vertexBuffer[i * 3].color.w = shapeColor.A;
 
 		//POINT B
-		m_vertexBuffer[i * 3 + 1].a = shapeColor.A;
-		m_vertexBuffer[i * 3 + 1].r = shapeColor.R;
-		m_vertexBuffer[i * 3 + 1].g = shapeColor.G;
-		m_vertexBuffer[i * 3 + 1].b = shapeColor.B;
+		m_vertexBuffer[i * 3 + 1].position.x = triangles[i].pointB.x;
+		m_vertexBuffer[i * 3 + 1].position.y = triangles[i].pointB.y;
+		m_vertexBuffer[i * 3 + 1].position.z = 1.0f;
+		
+		m_vertexBuffer[i * 3 + 1].color.x = shapeColor.R;
+		m_vertexBuffer[i * 3 + 1].color.y = shapeColor.G;
+		m_vertexBuffer[i * 3 + 1].color.z = shapeColor.B;
+		m_vertexBuffer[i * 3 + 1].color.w = shapeColor.A;
 
-		m_vertexBuffer[i * 3 + 1].x = triangles[i].pointB.x;
-		m_vertexBuffer[i * 3 + 1].y = triangles[i].pointB.y;
-		m_vertexBuffer[i * 3 + 1].z = 1.0f;
 
 		//POINT C
-		m_vertexBuffer[i * 3 + 2].a = shapeColor.A;
-		m_vertexBuffer[i * 3 + 2].r = shapeColor.R;
-		m_vertexBuffer[i * 3 + 2].g = shapeColor.G;
-		m_vertexBuffer[i * 3 + 2].b = shapeColor.B;
+		m_vertexBuffer[i * 3 + 2].position.x = triangles[i].pointC.x;
+		m_vertexBuffer[i * 3 + 2].position.y = triangles[i].pointC.y;
+		m_vertexBuffer[i * 3 + 2].position.z = 1.0f;
 
-		m_vertexBuffer[i * 3 + 2].x = triangles[i].pointC.x;
-		m_vertexBuffer[i * 3 + 2].y = triangles[i].pointC.y;
-		m_vertexBuffer[i * 3 + 2].z = 1.0f;
+		m_vertexBuffer[i * 3 + 2].color.x = shapeColor.R;
+		m_vertexBuffer[i * 3 + 2].color.y = shapeColor.G;
+		m_vertexBuffer[i * 3 + 2].color.z = shapeColor.B;
+		m_vertexBuffer[i * 3 + 2].color.w = shapeColor.A;
+
 	}
 
 	ID3D11Buffer* pVBuffer;
