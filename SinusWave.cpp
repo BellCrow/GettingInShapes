@@ -2,7 +2,7 @@
 #include <exception>
 #include <math.h>
 
-SinusWave::SinusWave(long long periodLenghtMs, float minValue, float maxValue)
+SinusWave::SinusWave(float periodLenghtMs, float minValue, float maxValue)
 {
 	m_periodLenghtMs = periodLenghtMs;
 	m_minValue = minValue;
@@ -11,7 +11,7 @@ SinusWave::SinusWave(long long periodLenghtMs, float minValue, float maxValue)
 	m_currentTimePointMs = 0;
 }
 
-void SinusWave::Tick(long long elapsedMs)
+void SinusWave::Tick(float elapsedMs)
 {
 	if (IsExhausted())
 	{

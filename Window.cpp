@@ -1,5 +1,5 @@
 #include "Window.h"
-
+#include "WindowClass.h"
 void Window::FireEvent(const WindowMessage& message)
 {
 	for (auto subscriber : _subscribers)
@@ -19,7 +19,7 @@ Window::Window(int width, int heigth, const char * name)
 
 	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false) == FALSE)
 	{
-		throw WINDOW_EXCEPTION();
+		throw std::exception("Error in adjust window rect");
 	}
 
 	m_windowHandle = CreateWindow(
@@ -29,7 +29,7 @@ Window::Window(int width, int heigth, const char * name)
 		nullptr, nullptr, WindowClass::GetInstance(), this);
 	if (m_windowHandle == 0)
 	{
-		throw WINDOW_EXCEPTION();
+		throw std::exception("Error in create window");
 	}
 	ShowWindow(m_windowHandle, SW_SHOWDEFAULT);
 }
@@ -83,41 +83,3 @@ void Window::Subscribe(std::shared_ptr<IWindowMessageReceiver> subscriber)
 }
 
 //STATIC WINDOW CLASS
-
-HINSTANCE Window::WindowClass::hInst;
-Window::WindowClass Window::WindowClass::instance;
-
-const char * Window::WindowClass::GetWindowClassName() noexcept
-{
-	return wndClassName;
-}
-
-HINSTANCE Window::WindowClass::GetInstance() noexcept
-{
-	return hInst;
-}
-
-Window::WindowClass::WindowClass()
-{
-	hInst = GetModuleHandle(nullptr);
-
-	WNDCLASSEX wndClass = { 0 };
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.cbClsExtra = 0;
-	wndClass.cbWndExtra = 0;
-
-	wndClass.style = CS_OWNDC;
-	wndClass.hInstance = GetInstance();
-	wndClass.lpfnWndProc = Window::InitialMessageHandler;
-	wndClass.lpszClassName = GetWindowClassName();
-
-	if (RegisterClassEx(&wndClass) == 0)
-	{
-		throw WINDOW_EXCEPTION();
-	}
-}
-
-Window::WindowClass::~WindowClass() noexcept
-{
-	UnregisterClass(wndClassName, hInst);
-}

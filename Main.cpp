@@ -10,6 +10,8 @@
 #include "SinusWave.h"
 #include "TimeHelper.h"
 #include "KeyboardMovementAnimation.h"
+#include "MessageSource.h"
+#include "CameraControl.h"
 
 #include <random>
 #include <sstream>
@@ -25,25 +27,29 @@ float Rand(bool negative = true)
 }
 
 int CALLBACK WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE pInstance,
-	LPSTR lpCmdLine,
-	int nCmdShow)
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPSTR lpCmdLine,
+	_In_ int nShowCmd)
 {
 	try
 	{
 		Window wnd(1024, 768, "My first custom window");
-		Keyboard keyBoard = Keyboard();
+		MessageSource msSource = MessageSource();
+		
+		Keyboard keyBoard = Keyboard(&msSource);
 		Camera camera = Camera();
+		
+		CameraControl controller = CameraControl(&keyBoard, &camera);
 		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
 
-		auto shape = new Rhombus(Point(0,0),200,300, Color(1.0f, Rand(), Rand(), Rand()));
+		AbstractShape* shape = new Rhombus(Point(0,0),200,100, Color(1.0f, Rand(), Rand(), Rand()));
 		sb.AddShape(shape);
 		
-
-		MSG msg = { 0 };
-
-		BOOL result = { 0 };
+		shape = new Triangle(Point(100,-100),200,100, Color(1.0f, Rand(), Rand(), Rand()));
+		sb.AddShape(shape);
+		
+		
 		bool continueRender = true;
 		std::thread renderThread = std::thread([&continueRender, &sb, &camera]()
 			{
@@ -53,27 +59,23 @@ int CALLBACK WinMain(
 					sb.Render(&camera);
 				}
 			});
-
-		while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0 && msg.message != WM_QUIT)
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		if (msg.message == WM_QUIT)
-		{
-			continueRender = false;
-			renderThread.join();
-			return static_cast<int>(msg.wParam);
-		}
-	}
-	catch (const WindowException & e)
-	{
-		MessageBox(nullptr, e.what(), "Window exception", MB_OK | MB_ICONEXCLAMATION);
+		
+		msSource.Subscribe([&continueRender](WindowMessage mes) {
+			if (mes.GetMessageType() == WM_QUIT)
+			{
+				continueRender = false;
+			}
+			});
+		auto messageResult = msSource.MessageLoop();
+		renderThread.join();
+		return static_cast<int>(messageResult);
 	}
 	catch (const std::exception & e)
 	{
-		MessageBox(nullptr, e.what(), "Unknown exception :'(", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, e.what(), "Exception :'(", MB_OK | MB_ICONEXCLAMATION);
 	}
 
 	return EXIT_SUCCESS;
+
+
 }

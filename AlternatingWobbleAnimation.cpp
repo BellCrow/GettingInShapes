@@ -36,7 +36,7 @@ void AlternatingWobbleAnimation::Tick()
 		m_lastTick = TimeHelper::GetTimeInMs();
 	}
 	auto time = TimeHelper::GetTimeInMs();
-	auto msSinceLastTick =  time - m_lastTick;
+	auto msSinceLastTick = (float) time - m_lastTick;
 	m_animationSine->Tick(msSinceLastTick);
 	m_lastTick = time;
 	if (m_animationState == AnimationState::ChangingWidth)

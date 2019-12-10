@@ -21,6 +21,7 @@ public:
 		m_color = color;
 		m_triangles = nullptr;
 		m_isDirty = true;
+		m_modelMatrix = {};
 	}
 
 	~AbstractShape() {
@@ -51,6 +52,13 @@ public:
 		if (m_isDirty)
 		{
 			CalculateRenderData();
+
+			m_modelMatrix = { };
+			auto scaleMatrix = DirectX::XMMatrixScaling(m_width, m_height, 1);
+
+			auto translationMatrix = DirectX::XMMatrixTranslation(m_position.x, m_position.y, 0);
+			m_modelMatrix = scaleMatrix * translationMatrix;
+
 			m_isDirty = false;
 		}
 		return &m_modelMatrix;

@@ -7,10 +7,10 @@ void WindowToKeyboardPipe::HandleWindowEvent(const WindowMessage& message)
 {
 	if (message.GetMessageType() == WM_KEYDOWN)
 	{
-		_keyboard.KeyDown(message.GetWParam());
+		_keyboard.KeyDown((int)message.GetWParam());
 	}
 	if (message.GetMessageType() == WM_KEYUP)
 	{
-		_keyboard.KeyUp(message.GetWParam());
+		_keyboard.KeyUp((int)message.GetWParam());
 	}
 }
