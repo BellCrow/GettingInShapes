@@ -46,7 +46,7 @@ private:
 	void InitShaders();
 	void ClearRenderTarget();
 	void SetViewProjectionMatrix(Camera* camera);
-	void SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix);	
+	void SetVertexShaderConstantBuffer(int slot, DirectX::XMMATRIX matrix);	
 	void RenderShape(AbstractShape* shape);
 public:
 	SceneBoard(HWND windowHandle);

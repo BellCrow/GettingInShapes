@@ -18,13 +18,13 @@ void SceneBoard::Tick()
 void SceneBoard::SetViewProjectionMatrix(Camera* camera)
 {
 	auto viewMatrix = camera->GetViewMatrix();
-	SetVertexCBuffer(1, viewMatrix);
+	SetVertexShaderConstantBuffer(1, viewMatrix);
 	
 	auto projMatrix = camera->GetProjectionMatrix();		
-	SetVertexCBuffer(2, projMatrix);
+	SetVertexShaderConstantBuffer(2, projMatrix);
 }
 
-void SceneBoard::SetVertexCBuffer(int slot, DirectX::XMMATRIX matrix)
+void SceneBoard::SetVertexShaderConstantBuffer(int slot, DirectX::XMMATRIX matrix)
 {
 	ID3D11Buffer* matrixBuffer = nullptr;
 	D3D11_BUFFER_DESC bd = {};
@@ -53,7 +53,7 @@ void SceneBoard::RenderShape(AbstractShape* shape)
 	//set model matrix here
 	auto modelMatrix = shape->GetModelmatrix();
 
-	SetVertexCBuffer(0, *modelMatrix);
+	SetVertexShaderConstantBuffer(0, *modelMatrix);
 
 	auto shapeColor = shape->GetColor();
 	auto triangles = shape->GetTriangles();
