@@ -48,7 +48,8 @@ int CALLBACK WinMain(
 		
 		sb->AddShape(shape);
 		
-		auto man = std::make_shared<ParticleManager>(100000,100000, sb);
+		auto man = std::make_shared<ParticleManager>(500,20000, sb);
+		man->SetGlobalForce(Eigen::Vector2f(0, -0.01));
 		auto part = std::make_shared<Particle>(Eigen::Vector2f(0, 0()),shape);
 		part->SetVelocity(Eigen::Vector2f(0.0001f, 0.0f));
 		man->AddParticle(part);

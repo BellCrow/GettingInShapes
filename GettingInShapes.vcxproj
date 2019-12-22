@@ -158,7 +158,6 @@
     <ClCompile Include="KeyboardMovementAnimation.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MessageSource.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="Rhombus.cpp" />
     <ClCompile Include="RenderTriangle.cpp" />

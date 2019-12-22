@@ -115,17 +115,7 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 	auto vertexPtr = m_vertexBuffer;
 	memcpy(ms.pData, vertexPtr, vertexBufferByteCount);
 	m_context->Unmap(pVBuffer, NULL);
-
-	ID3D11InputLayout* pLayout;    // global
-	D3D11_INPUT_ELEMENT_DESC ied[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-
-	m_device->CreateInputLayout(ied, 2, m_vertexShaderData->GetBufferPointer(), m_vertexShaderData->GetBufferSize(), &pLayout);
-	m_context->IASetInputLayout(pLayout);
-
+	
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	m_context->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
@@ -136,7 +126,6 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 	m_context->Draw(vertexCount, 0);
 
 	pVBuffer->Release();
-	pLayout->Release();
 
 	delete[] m_vertexBuffer;
 }
@@ -287,6 +276,19 @@ void SceneBoard::InitShaders()
 	// set the shader objects
 	m_context->VSSetShader(m_vertexShader, 0, 0);
 	m_context->PSSetShader(m_pixelShader, 0, 0);
+
+
+	ID3D11InputLayout* pLayout;    // global
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	m_device->CreateInputLayout(ied, 2, m_vertexShaderData->GetBufferPointer(), m_vertexShaderData->GetBufferSize(), &pLayout);
+	m_context->IASetInputLayout(pLayout);
+	pLayout->Release();
+
 }
 
 void SceneBoard::ClearRenderTarget()

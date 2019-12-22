@@ -99,9 +99,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Rendering\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp">
-      <Filter>ParticleSystem</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
       <Filter>ParticleSystem</Filter>
     </ClCompile>

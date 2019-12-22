@@ -31,9 +31,9 @@ void ParticleManager::Tick()
 		}
 		else
 		{
-			auto diffVelocity = GetRandomVelocity();
+			auto diffVelocity = Eigen::Vector2f(0,0);// GetRandomVelocity();
 			auto currentVel = particle->GetVelocity();
-			auto newVelocity = currentVel + diffVelocity;
+			auto newVelocity = currentVel + diffVelocity + m_globalForce;
 			particle->SetVelocity(newVelocity);
 			particle->Tick();
 		}
@@ -53,6 +53,11 @@ void ParticleManager::Tick()
 	}
 }
 
+void ParticleManager::SetGlobalForce(Eigen::Vector2f forceDirection)
+{
+	m_globalForce = forceDirection;
+}
+
 inline float ParticleManager::Rand(bool negative)
 {
 	auto value = (float)std::rand() / (float)RAND_MAX;
@@ -66,8 +71,8 @@ inline float ParticleManager::Rand(bool negative)
 
 inline Eigen::Vector2f ParticleManager::GetRandomVelocity()
 {
-	auto xDir = Rand() / 10;
-	auto yDir = Rand() / 10;
+	auto xDir = Rand() / 1;
+	auto yDir = Rand(false) / 1;
 
 	return Eigen::Vector2f(xDir, yDir);
 }
