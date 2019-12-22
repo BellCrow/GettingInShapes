@@ -1,6 +1,6 @@
 #include "CameraControl.h"
 
-CameraControl::CameraControl(Keyboard* keyboard, Camera* camera)
+CameraControl::CameraControl(sp<Keyboard> keyboard, sp<Camera> camera)
 {
 	m_keyBoard = keyboard;
 	m_camera = camera;

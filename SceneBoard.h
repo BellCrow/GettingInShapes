@@ -5,6 +5,7 @@
 #include "Vertex.h"
 #include "AbstractShape.h"
 #include "Camera.h"
+#include "SmartPointer.h"
 
 #include <d3d11.h>
 #include <d3d10.h>
@@ -18,8 +19,8 @@
 
 class SceneBoard
 {
-	std::vector<AbstractShape*> m_shapes;
-	std::vector<AbstractAnimation*> m_animations;
+	std::vector<sp<AbstractShape>> m_shapes;
+	std::vector<sp<AbstractAnimation>> m_animations;
 	
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
@@ -45,15 +46,16 @@ private:
 	void CreateBase3dObjects();
 	void InitShaders();
 	void ClearRenderTarget();
-	void SetViewProjectionMatrix(Camera* camera);
+	void SetViewProjectionMatrix(sp<Camera> camera);
 	void SetVertexShaderConstantBuffer(int slot, DirectX::XMMATRIX matrix);	
-	void RenderShape(AbstractShape* shape);
+	void RenderShape(sp<AbstractShape> shape);
 public:
 	SceneBoard(HWND windowHandle);
 	void Tick();
-	void Render(Camera* camera);
-	void AddShape(AbstractShape* shape);
-	void AddAnimation(AbstractAnimation* animation);
+	void Render(sp<Camera> camera);
+	void AddShape(sp<AbstractShape> shape);
+	void RemoveShape(sp<AbstractShape> shape);
+	void AddAnimation(sp<AbstractAnimation> animation);
 
 };
 

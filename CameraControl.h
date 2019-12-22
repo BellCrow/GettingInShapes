@@ -1,15 +1,16 @@
 #pragma once
 #include "Keyboard.h"
 #include "Camera.h"
+#include "SmartPointer.h"
 
 class CameraControl
 {
 public:
-	CameraControl(Keyboard* keyboard, Camera* camera);
+	CameraControl(sp<Keyboard> keyboard, sp<Camera> camera);
 
 private:
 	void HandleKeyboardEvent(KeyboardMessage keyboardMessage);
-	Keyboard* m_keyBoard;
-	Camera* m_camera;
+	sp<Keyboard> m_keyBoard;
+	sp<Camera> m_camera;
 };
 

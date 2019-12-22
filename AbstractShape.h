@@ -26,7 +26,9 @@ public:
 
 	~AbstractShape() {
 		delete[] m_triangles;
+		m_triangles = nullptr;
 	}
+
 	virtual void SetHeight(float) = 0;
 	virtual void SetWidth(float) = 0;
 	virtual void SetPosition(Point) = 0;

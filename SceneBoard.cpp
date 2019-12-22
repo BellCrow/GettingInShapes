@@ -15,7 +15,7 @@ void SceneBoard::Tick()
 	}
 }
 
-void SceneBoard::SetViewProjectionMatrix(Camera* camera)
+void SceneBoard::SetViewProjectionMatrix(sp<Camera> camera)
 {
 	auto viewMatrix = camera->GetViewMatrix();
 	SetVertexShaderConstantBuffer(1, viewMatrix);
@@ -48,7 +48,7 @@ void SceneBoard::SetVertexShaderConstantBuffer(int slot, DirectX::XMMATRIX matri
 	cBuffer->Release();
 }
 
-void SceneBoard::RenderShape(AbstractShape* shape)
+void SceneBoard::RenderShape(sp<AbstractShape> shape)
 {
 	//set model matrix here
 	auto modelMatrix = shape->GetModelmatrix();
@@ -141,7 +141,7 @@ void SceneBoard::RenderShape(AbstractShape* shape)
 	delete[] m_vertexBuffer;
 }
 
-void SceneBoard::Render(Camera* camera)
+void SceneBoard::Render(sp<Camera> camera)
 {
 	ClearRenderTarget();
 	//set view/projection matrix here
@@ -156,12 +156,22 @@ void SceneBoard::Render(Camera* camera)
 	m_swapChain->Present(0, 0);
 }
 
-void SceneBoard::AddShape(AbstractShape* shape)
+void SceneBoard::AddShape(sp<AbstractShape> shape)
 {
 	m_shapes.push_back(shape);
 }
 
-void SceneBoard::AddAnimation(AbstractAnimation* animation)
+void SceneBoard::RemoveShape(sp<AbstractShape> shape)
+{
+	auto eraseIter = std::remove_if(m_shapes.begin(), m_shapes.end(), [&shape](sp<AbstractShape> iterShape)
+		{
+			auto result = shape == iterShape;
+			return result;
+		});
+	m_shapes.erase(eraseIter);
+}
+
+void SceneBoard::AddAnimation(sp<AbstractAnimation> animation)
 {
 	m_animations.push_back(animation);
 }
@@ -282,7 +292,6 @@ void SceneBoard::InitShaders()
 void SceneBoard::ClearRenderTarget()
 {
 	// clear the back buffer to a deep blue
-	float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	float color[4] = { 0.0f, 0.1f, 0.2f, 0.7f };
 	m_context->ClearRenderTargetView(m_renderTargetView, color);
 }
-
