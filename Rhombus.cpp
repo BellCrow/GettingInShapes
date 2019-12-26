@@ -8,10 +8,7 @@ Rhombus::Rhombus(Point pos, float width, float height, Color color):
 	m_triangles = new RenderTriangle[2];
 }
 
-Rhombus::~Rhombus()
-{
-	delete m_triangles;
-}
+Rhombus::~Rhombus(){}
 
 void Rhombus::SetHeight(float a_height)
 {

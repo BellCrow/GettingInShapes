@@ -12,13 +12,15 @@
 #include "KeyboardMovementAnimation.h"
 #include "MessageSource.h"
 #include "CameraControl.h"
+#include "Particle.h"
+#include "ParticleManager.h"
+#include "Eigen/Core.h"
 
 #include <random>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <thread>
-
 
 float Rand(bool negative = true)
 {
@@ -35,38 +37,43 @@ int CALLBACK WinMain(
 	try
 	{
 		Window wnd(1024, 768, "My first custom window");
-		MessageSource msSource = MessageSource();
+		auto msSource = std::make_shared<MessageSource>();
 		
-		Keyboard keyBoard = Keyboard(&msSource);
-		Camera camera = Camera();
+		sp<Keyboard> keyBoard = std::make_shared<Keyboard>(msSource);
+		sp<Camera> camera = std::make_shared<Camera>();
 		
-		CameraControl controller = CameraControl(&keyBoard, &camera);
-		SceneBoard sb = SceneBoard(wnd.GetWindowHandle());
-
-		AbstractShape* shape = new Rhombus(Point(0,0),200,100, Color(1.0f, Rand(), Rand(), Rand()));
-		sb.AddShape(shape);
+		sp<CameraControl> controller = std::make_shared<CameraControl>(keyBoard, camera);
+		auto sb = std::make_shared<SceneBoard>(wnd.GetWindowHandle());
+		sp<AbstractShape> shape = std::make_shared<Rhombus>(Point(0, 0), 15, 15, Color(1.0f, Rand(), Rand(), Rand()));
 		
-		shape = new Triangle(Point(100,-100),200,100, Color(1.0f, Rand(), Rand(), Rand()));
-		sb.AddShape(shape);
+		sb->AddShape(shape);
+		
+		auto man = std::make_shared<ParticleManager>(500,20000, sb);
+		man->SetGlobalForce(Eigen::Vector2f(0, -0.01));
+		auto part = std::make_shared<Particle>(Eigen::Vector2f(0, 0()),shape);
+		part->SetVelocity(Eigen::Vector2f(0.0001f, 0.0f));
+		man->AddParticle(part);
 		
 		
 		bool continueRender = true;
-		std::thread renderThread = std::thread([&continueRender, &sb, &camera]()
+		std::thread renderThread = std::thread([&continueRender, &sb, &camera, &man]()
 			{
 				while (continueRender)
 				{
-					sb.Tick();
-					sb.Render(&camera);
+					man->Tick();
+					sb->Tick();
+
+					sb->Render(camera);
 				}
 			});
 		
-		msSource.Subscribe([&continueRender](WindowMessage mes) {
+		msSource->Subscribe([&continueRender](WindowMessage mes) {
 			if (mes.GetMessageType() == WM_QUIT)
 			{
 				continueRender = false;
 			}
 			});
-		auto messageResult = msSource.MessageLoop();
+		auto messageResult = msSource->MessageLoop();
 		renderThread.join();
 		return static_cast<int>(messageResult);
 	}
@@ -76,6 +83,4 @@ int CALLBACK WinMain(
 	}
 
 	return EXIT_SUCCESS;
-
-
 }

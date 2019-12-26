@@ -1,7 +1,7 @@
 #include "Keyboard.h"
 #include <functional>
 
-Keyboard::Keyboard(MessageSource* messageSource)
+Keyboard::Keyboard(sp<MessageSource> messageSource)
 {
 	m_messageSource = messageSource;
 	std::function<void(WindowMessage)> function = std::bind(&Keyboard::Handlemessage, this, std::placeholders::_1);
