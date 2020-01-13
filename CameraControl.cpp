@@ -16,19 +16,19 @@ void CameraControl::HandleKeyboardEvent(KeyboardMessage keyboardMessage)
 		Point newCameraPos = {};
 		if (keyboardMessage.IsWKey())
 		{
-			newCameraPos = Point(currentCameraPos.x, currentCameraPos.y + moveAmount);
+			newCameraPos = Point(currentCameraPos.x, currentCameraPos.y + moveAmount, currentCameraPos.z);
 		}
 		else if (keyboardMessage.IsAKey())
 		{
-			newCameraPos = Point(currentCameraPos.x - moveAmount, currentCameraPos.y);
+			newCameraPos = Point(currentCameraPos.x - moveAmount, currentCameraPos.y,currentCameraPos.z);
 		}
 		else if (keyboardMessage.IsSKey())
 		{
-			newCameraPos = Point(currentCameraPos.x , currentCameraPos.y - moveAmount);
+			newCameraPos = Point(currentCameraPos.x , currentCameraPos.y - moveAmount, currentCameraPos.z);
 		}
 		else if (keyboardMessage.IsDKey())
 		{
-			newCameraPos = Point(currentCameraPos.x + moveAmount, currentCameraPos.y);
+			newCameraPos = Point(currentCameraPos.x + moveAmount, currentCameraPos.y, currentCameraPos.z);
 		}
 		m_camera->SetCenterPosition(newCameraPos);
 	}

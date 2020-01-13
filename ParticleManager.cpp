@@ -31,7 +31,7 @@ void ParticleManager::Tick()
 		}
 		else
 		{
-			auto diffVelocity = Eigen::Vector2f(0,0);// GetRandomVelocity();
+			auto diffVelocity = Eigen::Vector3f(0,0,0);// GetRandomVelocity();
 			auto currentVel = particle->GetVelocity();
 			auto newVelocity = currentVel + diffVelocity + m_globalForce;
 			particle->SetVelocity(newVelocity);
@@ -53,7 +53,7 @@ void ParticleManager::Tick()
 	}
 }
 
-void ParticleManager::SetGlobalForce(Eigen::Vector2f forceDirection)
+void ParticleManager::SetGlobalForce(Eigen::Vector3f forceDirection)
 {
 	m_globalForce = forceDirection;
 }
@@ -69,18 +69,20 @@ inline float ParticleManager::Rand(bool negative)
 	return value * multiplicator;
 }
 
-inline Eigen::Vector2f ParticleManager::GetRandomVelocity()
+inline Eigen::Vector3f ParticleManager::GetRandomVelocity()
 {
 	auto xDir = Rand() / 1;
 	auto yDir = Rand(false) / 1;
+	auto zDir = Rand() / 1;
 
-	return Eigen::Vector2f(xDir, yDir);
+	return Eigen::Vector3f(xDir, yDir, zDir);
 }
 
 void ParticleManager::SpawnNewParticle()
 {
 	auto initialVelocity = GetRandomVelocity();
-	auto shape = std::make_shared<Rhombus>(Point(0, 0), 15, 15, Color(1.0f, Rand(), Rand(), Rand()));
+
+	auto shape = std::make_shared<Rhombus>(Point(0, 0, 0), 15.0f, 15.0f,0.0f, Color(1.0f, Rand(), Rand(), Rand()));
 	m_sceneBoard->AddShape(shape);
 	auto particle = std::make_shared<Particle>(shape);
 	particle->SetVelocity(initialVelocity);

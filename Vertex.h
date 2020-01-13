@@ -19,7 +19,8 @@ struct Vertex
 		color.w = 0;
 	}
 	
-	Vertex(float a_x,float a_y,float a_z,float a_w,float a_r,float a_g,float a_b,float a_a)
+	Vertex(float a_x,float a_y,float a_z,float a_w,
+		   float a_r,float a_g,float a_b,float a_a)
 	{
 		position = {};
 		position.x = a_x;

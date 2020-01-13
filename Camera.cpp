@@ -7,22 +7,17 @@ Camera::Camera()
 
 void Camera::SetCenterPosition(Point position)
 {
-	m_position = position;
+	m_cameraPosition = position;
 }
 
-void Camera::SetCenterPositionX(float position)
+void Camera::SetLookAtPosition(Point position)
 {
-	m_position = Point(position, m_position.y);
-}
-
-void Camera::SetCenterPositionY(float position)
-{
-	m_position = Point(m_position.x, position);
+	m_cameraLookAtPosition = position;
 }
 
 Point Camera::GetCenterPosition() const
 {
-	return m_position;
+	return m_cameraPosition;
 }
 
 const DirectX::XMMATRIX Camera::GetViewMatrix()
@@ -40,6 +35,6 @@ const DirectX::XMMATRIX Camera::GetViewMatrix()
 
 const DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
-	auto projectionMatrix = DirectX::XMMatrixOrthographicLH(1024, 768, 0.1, 10000);
+	auto projectionMatrix = DirectX::XMMatrixOrthographicLH(1024, 768, 0.001, 100000);
 	return projectionMatrix;
 }

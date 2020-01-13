@@ -49,6 +49,7 @@ private:
 	void SetViewProjectionMatrix(sp<Camera> camera);
 	void SetVertexShaderConstantBuffer(int slot, DirectX::XMMATRIX matrix);	
 	void RenderShape(sp<AbstractShape> shape);
+	void RenderWireFrame(sp<AbstractShape> shape);
 public:
 	SceneBoard(HWND windowHandle);
 	void Tick();

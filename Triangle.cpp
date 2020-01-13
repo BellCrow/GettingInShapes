@@ -1,33 +1,7 @@
 #include "Triangle.h"
 
 Triangle::Triangle(Point center, float width, float height, Color color)
-	:AbstractShape(center, width, height, color)
-{
-
-}
-
-void Triangle::SetHeight(float a_height)
-{
-	m_height = a_height;
-	m_isDirty = true;
-}
-
-void Triangle::SetWidth(float a_width)
-{
-	m_width = a_width;
-	m_isDirty = true;
-}
-
-void Triangle::SetPosition(Point a_center)
-{
-	m_position = a_center;
-	m_isDirty = true;
-}
-
-void Triangle::SetColor(Color color)
-{
-	m_color = color;
-}
+	:AbstractShape(center, width, height,0, color){}
 
 int Triangle::GetTriangleCount()
 {
@@ -36,14 +10,20 @@ int Triangle::GetTriangleCount()
 
 void Triangle::CalculateRenderData()
 {
+	auto rawTrianglePointer = new RenderTriangle[1];
 	if (m_triangles == nullptr)
 	{
-		m_triangles = new RenderTriangle[1];
+		m_triangles = std::shared_ptr<RenderTriangle[]>(new RenderTriangle[1]);
 	}
 	
-	Point a = Point(- 1, - 0.5);
-	Point b = Point(0, 0.5);
-	Point c = Point(1, - 0.5);
-	m_triangles[0] = RenderTriangle(a, b, c);
+	Point a = Point(- 1, - 0.5, 0);
+	Point b = Point(0, 0.5, 0);
+	Point c = Point(1, - 0.5, 0);
+	rawTrianglePointer[0] = RenderTriangle(a, b, c);
+}
+
+int Triangle::GetWireframeLineCount()
+{
+	return -1;
 }
 

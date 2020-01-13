@@ -8,20 +8,15 @@
 class Rhombus: public AbstractShape
 {
 public:
-	Rhombus(Point pos, float width, float height, Color color);
+	Rhombus(Point pos, float width, float height, float depth, Color color);
 	~Rhombus();
 
-	// Inherited via AbstractShape
-	void SetHeight(float) override;
-	void SetWidth(float) override;
-	void SetPosition(Point) override;
-	void SetColor(Color) override;
 private:
-	
 	// Inherited via AbstractShape
-	virtual int GetTriangleCount() override;
+	int GetTriangleCount() override;
+	void CalculateRenderData() override;
 
 	// Inherited via AbstractShape
-	virtual void CalculateRenderData() override;
+	virtual int GetWireframeLineCount() override;
 };
 

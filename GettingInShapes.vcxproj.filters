@@ -43,6 +43,12 @@
     <Filter Include="ParticleSystem">
       <UniqueIdentifier>{72f1807f-be51-4c54-9e35-3a3c9b9cc74b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Shapes\3D">
+      <UniqueIdentifier>{daadbf12-9821-4c13-af38-556edd16acba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shapes\2D">
+      <UniqueIdentifier>{745d1b4e-4039-48d3-925d-a3ff157dec78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -57,14 +63,8 @@
     <ClCompile Include="KeyboardMessage.cpp">
       <Filter>Input\Keyboard</Filter>
     </ClCompile>
-    <ClCompile Include="Rhombus.cpp">
-      <Filter>Rendering\Shapes</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTriangle.cpp">
       <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Rendering\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="SceneBoard.cpp">
       <Filter>Rendering</Filter>
@@ -73,9 +73,6 @@
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
     <ClCompile Include="AlternatingWobbleAnimation.cpp">
-      <Filter>Rendering\Animations</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardMovementAnimation.cpp">
       <Filter>Rendering\Animations</Filter>
     </ClCompile>
     <ClCompile Include="SinusWave.cpp">
@@ -101,6 +98,18 @@
     </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
       <Filter>ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Rendering\Shapes\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Rhombus.cpp">
+      <Filter>Rendering\Shapes\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuboid.cpp">
+      <Filter>Rendering\Shapes\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractShape.cpp">
+      <Filter>Rendering\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,14 +140,8 @@
     <ClInclude Include="AbstractShape.h">
       <Filter>Rendering\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Rhombus.h">
-      <Filter>Rendering\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTriangle.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>Rendering\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="SceneBoard.h">
       <Filter>Rendering</Filter>
@@ -153,9 +156,6 @@
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
     <ClInclude Include="AlternatingWobbleAnimation.h">
-      <Filter>Rendering\Animations</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardMovementAnimation.h">
       <Filter>Rendering\Animations</Filter>
     </ClInclude>
     <ClInclude Include="TimeHelper.h">
@@ -199,6 +199,18 @@
     </ClInclude>
     <ClInclude Include="SmartPointer.h">
       <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Rendering\Shapes\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Rhombus.h">
+      <Filter>Rendering\Shapes\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Cuboid.h">
+      <Filter>Rendering\Shapes\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderLine.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

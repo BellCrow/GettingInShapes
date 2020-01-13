@@ -14,7 +14,7 @@ public:
 		m_shape = shape;
 	}
 
-	Particle(Eigen::Vector2f initialPosition, sp<AbstractShape> shape)
+	Particle(Eigen::Vector3f initialPosition, sp<AbstractShape> shape)
 	{
 		Reset();
 		
@@ -22,32 +22,32 @@ public:
 		m_position = initialPosition;
 	}
 
-	void SetPosition(Eigen::Vector2f newPosition)
+	void SetPosition(Eigen::Vector3f newPosition)
 	{
 		m_position = newPosition;
 	}
 
-	void SetVelocity(Eigen::Vector2f newVelocity)
+	void SetVelocity(Eigen::Vector3f newVelocity)
 	{
 		m_velocity = newVelocity;
 	}
 
-	void SetAcceleration(Eigen::Vector2f newAcceleration)
+	void SetAcceleration(Eigen::Vector3f newAcceleration)
 	{
 		m_acceleration = newAcceleration;
 	}
 
-	Eigen::Vector2f GetPosition()
+	Eigen::Vector3f GetPosition()
 	{
 		return m_position;
 	}
 
-	Eigen::Vector2f GetVelocity()
+	Eigen::Vector3f GetVelocity()
 	{
 		return m_velocity;
 	}
 
-	Eigen::Vector2f GetAcceleration()
+	Eigen::Vector3f GetAcceleration()
 	{
 		return m_acceleration;
 	}
@@ -70,7 +70,7 @@ public:
 		m_velocity += m_acceleration;
 		m_position += m_velocity;
 
-		m_shape->SetPosition(Point(m_position[0], m_position[1]));
+		m_shape->SetPosition(Point(m_position[0], m_position[1], m_position[2]));
 		m_age++;
 	}
 
@@ -91,7 +91,7 @@ private:
 
 	int m_age;
 	sp<AbstractShape> m_shape;
-	Eigen::Vector2f m_position;
-	Eigen::Vector2f m_velocity;
-	Eigen::Vector2f m_acceleration;
+	Eigen::Vector3f m_position;
+	Eigen::Vector3f m_velocity;
+	Eigen::Vector3f m_acceleration;
 };

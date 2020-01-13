@@ -67,7 +67,7 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 		//POINT A
 		m_vertexBuffer[i * 3].position.x = triangles[i].pointA.x;
 		m_vertexBuffer[i * 3].position.y = triangles[i].pointA.y;
-		m_vertexBuffer[i * 3].position.z = 1.0f;
+		m_vertexBuffer[i * 3].position.z = triangles[i].pointA.z;
 
 		m_vertexBuffer[i * 3].color.x = shapeColor.R;
 		m_vertexBuffer[i * 3].color.y = shapeColor.G;
@@ -77,7 +77,7 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 		//POINT B
 		m_vertexBuffer[i * 3 + 1].position.x = triangles[i].pointB.x;
 		m_vertexBuffer[i * 3 + 1].position.y = triangles[i].pointB.y;
-		m_vertexBuffer[i * 3 + 1].position.z = 1.0f;
+		m_vertexBuffer[i * 3 + 1].position.z = triangles[i].pointB.z;
 		
 		m_vertexBuffer[i * 3 + 1].color.x = shapeColor.R;
 		m_vertexBuffer[i * 3 + 1].color.y = shapeColor.G;
@@ -88,7 +88,7 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 		//POINT C
 		m_vertexBuffer[i * 3 + 2].position.x = triangles[i].pointC.x;
 		m_vertexBuffer[i * 3 + 2].position.y = triangles[i].pointC.y;
-		m_vertexBuffer[i * 3 + 2].position.z = 1.0f;
+		m_vertexBuffer[i * 3 + 2].position.z = triangles[i].pointC.z;
 
 		m_vertexBuffer[i * 3 + 2].color.x = shapeColor.R;
 		m_vertexBuffer[i * 3 + 2].color.y = shapeColor.G;
@@ -130,6 +130,79 @@ void SceneBoard::RenderShape(sp<AbstractShape> shape)
 	delete[] m_vertexBuffer;
 }
 
+void SceneBoard::RenderWireFrame(sp<AbstractShape> shape)
+{
+	//set model matrix here
+	auto modelMatrix = shape->GetModelmatrix();
+
+	SetVertexShaderConstantBuffer(0, *modelMatrix);
+
+	auto shapeColor = Color(1.0f,1.0f,1.0f,1.0f);
+	auto lines = shape->GetWireframeLines();
+	auto lineCount = shape->GetWireframeLineCount();
+	UINT vertexCount = lineCount * 2;
+	auto vertexSize = sizeof(Vertex);
+	UINT vertexBufferByteCount = vertexCount * vertexSize;
+	auto m_vertexBuffer = new Vertex[vertexCount];
+
+	for (int i = 0; i < lineCount; i++)
+	{
+		//POINT A
+		auto lineStart = lines[i].GetStart();
+		m_vertexBuffer[i * 2].position.x = lineStart.x;
+		m_vertexBuffer[i * 2].position.y = lineStart.y;
+		m_vertexBuffer[i * 2].position.z = lineStart.z;
+
+		m_vertexBuffer[i * 2].color.x = shapeColor.R;
+		m_vertexBuffer[i * 2].color.y = shapeColor.G;
+		m_vertexBuffer[i * 2].color.z = shapeColor.B;
+		m_vertexBuffer[i * 2].color.w = shapeColor.A;
+
+		//POINT B
+		auto lineEnd = lines[i].GetEnd();
+		m_vertexBuffer[i * 2 + 1].position.x = lineEnd.x;
+		m_vertexBuffer[i * 2 + 1].position.y = lineEnd.y;
+		m_vertexBuffer[i * 2 + 1].position.z = lineEnd.z;
+
+		m_vertexBuffer[i * 2 + 1].color.x = shapeColor.R;
+		m_vertexBuffer[i * 2 + 1].color.y = shapeColor.G;
+		m_vertexBuffer[i * 2 + 1].color.z = shapeColor.B;
+		m_vertexBuffer[i * 2 + 1].color.w = shapeColor.A;
+	}
+
+	ID3D11Buffer* pVBuffer;
+
+	D3D11_BUFFER_DESC bd = {};
+	bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+	bd.ByteWidth = vertexBufferByteCount;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
+
+	if (FAILED(m_device->CreateBuffer(&bd, NULL, &pVBuffer)) || pVBuffer == nullptr)
+	{
+		throw std::exception("Could not create vertex buffer");
+	}
+
+	D3D11_MAPPED_SUBRESOURCE ms;
+	m_context->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+	auto vertexPtr = m_vertexBuffer;
+	memcpy(ms.pData, vertexPtr, vertexBufferByteCount);
+	m_context->Unmap(pVBuffer, NULL);
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	m_context->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
+	// select which primtive type we are using
+	m_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	// draw the vertex buffer to the back buffer
+	m_context->Draw(vertexCount, 0);
+
+	pVBuffer->Release();
+
+	delete[] m_vertexBuffer;
+}
+
 void SceneBoard::Render(sp<Camera> camera)
 {
 	ClearRenderTarget();
@@ -140,6 +213,7 @@ void SceneBoard::Render(sp<Camera> camera)
 	for (auto shape : m_shapes)
 	{
 		RenderShape(shape);
+		RenderWireFrame(shape);
 	}
 
 	m_swapChain->Present(0, 0);

@@ -8,16 +8,16 @@ public:
 
 	Camera();
 	void SetCenterPosition(Point point);
-	void SetCenterPositionX(float position);
-	void SetCenterPositionY(float position);
-	
+	void SetLookAtPosition(Point point);
 	Point GetCenterPosition() const;
 	
 	const DirectX::XMMATRIX GetViewMatrix();
 	const DirectX::XMMATRIX GetProjectionMatrix();
 
 private:
-	Point m_position;
+	Point m_cameraPosition;
+	Point m_cameraLookAtPosition;
+
 	DirectX::XMMATRIX m_viewProjection;
 };
 
