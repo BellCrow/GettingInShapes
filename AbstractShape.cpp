@@ -30,6 +30,36 @@ void AbstractShape::SetColor(Color color)
 	CalculateRenderData();
 }
 
+void AbstractShape::SetXRotatation(float rotation)
+{
+	m_roll = rotation;
+}
+
+void AbstractShape::SetYRotatation(float rotation)
+{
+	m_pitch = rotation;
+}
+
+void AbstractShape::SetZRotatation(float rotation)
+{
+	m_yaw = rotation;
+}
+
+float AbstractShape::GetXRotatation()
+{
+	return m_roll;
+}
+
+float AbstractShape::GetYRotatation()
+{
+	return m_pitch;
+}
+
+float AbstractShape::GetZRotatation()
+{
+	return m_yaw;
+}
+
 const XMMATRIX* AbstractShape::GetModelmatrix() {
 	if (m_isDirty)
 	{
@@ -38,11 +68,11 @@ const XMMATRIX* AbstractShape::GetModelmatrix() {
 		auto translationMatrix = DirectX::XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
 		auto rotationMatrix = 
 			DirectX::XMMatrixRotationRollPitchYaw(
-				DirectX::XM_PIDIV4 / 2,
-				-DirectX::XM_PIDIV4/2,
-				0);
+				m_roll,
+				m_pitch,
+				m_yaw);
 		m_modelMatrix = rotationMatrix * scaleMatrix * translationMatrix;
-		m_isDirty = false;
+		m_isDirty = true;
 	}
 	return &m_modelMatrix;
 }

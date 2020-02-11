@@ -25,6 +25,9 @@ public:
 		m_triangles = nullptr;
 		m_isDirty = true;
 		m_modelMatrix = {};
+		m_pitch = 0;
+		m_yaw = 0;
+		m_roll = 0;
 	}
 
 	~AbstractShape() {
@@ -45,9 +48,21 @@ public:
 	const Point& GetPosition() const { return m_position; }
 	const Color& GetColor() const { return m_color; }
 		
+	void SetXRotatation(float rotation);
+	void SetYRotatation(float rotation);
+	void SetZRotatation(float rotation);
+
+	float GetXRotatation();
+	float GetYRotatation();
+	float GetZRotatation();
+
 	const sp<RenderTriangle[]> GetTriangles() {return m_triangles;}
 	const sp<RenderLine[]> GetWireframeLines() {return m_wireframeLines;}
 	const XMMATRIX* GetModelmatrix();
+
+	float m_pitch;
+	float m_yaw;
+	float m_roll;
 
 protected:
 	
@@ -58,7 +73,7 @@ protected:
 	float m_height;
 	float m_width;
 	float m_depth;
-
+	
 	Point m_position;
 	std::string m_name;
 	std::shared_ptr<RenderTriangle[]> m_triangles;

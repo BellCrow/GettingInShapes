@@ -16,6 +16,8 @@
 #include "Eigen/Core.h"
 #include "Cuboid.h"
 
+#include <DirectXMath.h>
+
 #include <random>
 #include <sstream>
 #include <string>
@@ -27,8 +29,6 @@ float Rand(bool negative = true)
 	auto value = (float)std::rand() / (float)RAND_MAX;
 	return value * (negative && std::rand() % 2 == 0 ? 1 : -1);
 }
-
-
 
 //int ParticleDemo()
 //{
@@ -78,20 +78,30 @@ int CubeDemo()
 {
 	Window wnd(1024, 768, "My first custom window");
 	auto msSource = std::make_shared<MessageSource>();
-	
+
 	sp<Camera> camera = std::make_shared<Camera>();
 	auto sb = std::make_shared<SceneBoard>(wnd.GetWindowHandle());
-	sp<AbstractShape> shape = std::make_shared<Cuboid>(Point(0, 0,100), 150.0f, 150.0f, 150.0f, Color(1.0f, 1.0f, 1.0f, 1.0f));
-
+	sp<AbstractShape> shape = std::make_shared<Cuboid>(Point(0, 0, 100), 150.0f, 150.0f, 150.0f, Color(1.0f, 1.0f, 1.0f, 1.0f));
 	sb->AddShape(shape);
 	bool continueRender = true;
 
-	std::thread renderThread = std::thread([&continueRender, &sb, &camera]()
+	std::thread renderThread = std::thread([&continueRender, &sb, &camera, &shape]()
 		{
+			float xRotVel = 0;
+			float yRotVel = 0;
+			float zRotVel = 0;
 			while (continueRender)
 			{
 				sb->Tick();
 				sb->Render(camera);
+
+				xRotVel += Rand() / 1000000;
+				yRotVel += Rand() / 1000000;
+				zRotVel += Rand() / 1000000;
+
+				shape->SetXRotatation(shape->GetXRotatation() + xRotVel);
+				shape->SetYRotatation(shape->GetYRotatation() + yRotVel);
+				shape->SetZRotatation(shape->GetZRotatation() + zRotVel);
 			}
 		});
 

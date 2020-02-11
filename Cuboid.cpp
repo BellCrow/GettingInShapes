@@ -40,16 +40,16 @@ void Cuboid::CreateWireFrameLines()
 	m_wireframeLines[i++] = RenderLine(c, a);
 
 	////sides
-	m_wireframeLines[i++] = RenderLine(a,e);
-	m_wireframeLines[i++] = RenderLine(b,f);
-	m_wireframeLines[i++] = RenderLine(d,h);
-	m_wireframeLines[i++] = RenderLine(c,g);
+	m_wireframeLines[i++] = RenderLine(a, e);
+	m_wireframeLines[i++] = RenderLine(b, f);
+	m_wireframeLines[i++] = RenderLine(d, h);
+	m_wireframeLines[i++] = RenderLine(c, g);
 
 	////back
 	m_wireframeLines[i++] = RenderLine(e, f);
 	m_wireframeLines[i++] = RenderLine(f, h);
 	m_wireframeLines[i++] = RenderLine(h, g);
-	m_wireframeLines[i++] = RenderLine(g,e);
+	m_wireframeLines[i++] = RenderLine(g, e);
 }
 
 void Cuboid::CreateTriangles()
@@ -64,24 +64,33 @@ void Cuboid::CreateTriangles()
 	auto c = Point(-s, -s, -s);
 	auto d = Point(s, -s, -s);
 
-	auto e = Point(s, -s, s);
+	auto e = Point(-s, s, s);
 	auto f = Point(s, s, s);
-	auto g = Point(-s, s, s);
-	auto h = Point(-s, -s, s);
+	auto g = Point(-s, -s, s);
+	auto h = Point(s, -s, s);
 
 	int iter = 0;
+	//front
 	m_triangles[iter++] = RenderTriangle(a, b, c);
 	m_triangles[iter++] = RenderTriangle(b, d, c);
+
+	//right
 	m_triangles[iter++] = RenderTriangle(b, f, d);
-	m_triangles[iter++] = RenderTriangle(f, g, d);
-	m_triangles[iter++] = RenderTriangle(f, e, h);
-	m_triangles[iter++] = RenderTriangle(f, h, g);
-	m_triangles[iter++] = RenderTriangle(e, a, h);
-	m_triangles[iter++] = RenderTriangle(a, c, h);
-	m_triangles[iter++] = RenderTriangle(e, a, f);
-	m_triangles[iter++] = RenderTriangle(f, a, b);
-	m_triangles[iter++] = RenderTriangle(c, d, h);
-	m_triangles[iter++] = RenderTriangle(h, d, g);
+	m_triangles[iter++] = RenderTriangle(f, h, d);
+
+	////left
+	m_triangles[iter++] = RenderTriangle(e, a, g);
+	m_triangles[iter++] = RenderTriangle(g,a,c);
+	//
+	////top
+	m_triangles[iter++] = RenderTriangle(a, e, b);
+	m_triangles[iter++] = RenderTriangle(e, f, b);
+	//
+	////bottom
+	m_triangles[iter++] = RenderTriangle(c, d, g);
+	m_triangles[iter++] = RenderTriangle(d, h, g);
+	//
+	////back
+	m_triangles[iter++] = RenderTriangle(f, e, g);
+	m_triangles[iter++] = RenderTriangle(f, g, h);
 }
-
-
